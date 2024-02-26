@@ -1992,6 +1992,37 @@ module.exports = function (app) {
         } else {
           console.log("No L2 Manager found for the given employee ID");
         }
+        /////Sending Mail to Level 2 Manager
+        Employees.findOne({
+          attributes: ['officialEmail'],
+          where: { employeeId: firstL2ManagerId },
+          raw: true
+        }).then((l2ManagerDetails) => {
+          if (l2ManagerDetails) {
+            const l2ManagerEmail = l2ManagerDetails.officialEmail;
+            const htmlFilePath = path.join('Mails/mangAppMail.ejs');
+            const htmlContent = fs.readFileSync(htmlFilePath, 'utf8')
+            let mailOptions = {
+              from: 'support@timesofpeople.com',
+              to: l2ManagerEmail,
+              subject: 'You Have Been Assigned as an Evaluator',
+              text: `Dear Manager, \n\nYou have been assigned as an evaluator for an employee. Please review the employee's evaluation.\n\nRegards,\Mckinsol Consulting Inc.`,
+              html: htmlContent,
+            };
+
+            console.log(l2ManagerEmail);
+
+            transporter.sendMail(mailOptions, function (error, info) {
+              if (error) {
+                console.log(error);
+              } else {
+                console.log('Email sent to ' + l2ManagerEmail);
+              }
+            });
+          }
+        }).catch((err) => {
+          console.log("Error finding L2 Manager details: ", err);
+        });
         ////Creating a row in L2Appraisal Table///////////
         await L2Appraisal.create({ appraisalId: req.body.appraisalId, L2ManagerId: firstL2ManagerId }).then((data) => {
           // console.log("data at l3:::",data);
@@ -2016,6 +2047,37 @@ module.exports = function (app) {
         } else {
           console.log("No L3 Manager found for the given employee ID");
         }
+        //////////////Sending mail to Level3 Manager//////////
+        Employees.findOne({
+          attributes: ['officialEmail'],
+          where: { employeeId: firstL3ManagerId },
+          raw: true
+        }).then((l3ManagerDetails) => {
+          if (l3ManagerDetails) {
+            const l3ManagerEmail = l3ManagerDetails.officialEmail;
+            const htmlFilePath = path.join('Mails/mangAppMail.ejs');
+            const htmlContent = fs.readFileSync(htmlFilePath, 'utf8')
+            let mailOptions = {
+              from: 'support@timesofpeople.com',
+              to: l3ManagerEmail,
+              subject: 'You Have Been Assigned as an Evaluator',
+              text: `Dear Manager, \n\nYou have been assigned as an evaluator for an employee. Please review the employee's evaluation.\n\nRegards,\Mckinsol Consulting Inc.`,
+              html: htmlContent,
+            };
+
+            console.log(l3ManagerEmail);
+
+            transporter.sendMail(mailOptions, function (error, info) {
+              if (error) {
+                console.log(error);
+              } else {
+                console.log('Email sent to ' + l3ManagerEmail);
+              }
+            });
+          }
+        }).catch((err) => {
+          console.log("Error finding L3 Manager details: ", err);
+        });
         ////Creating a row in L3Appraisal Table///////////
         if (!(isNull(firstL3ManagerId))) {
           await L3Appraisal.create({ appraisalId: req.body.appraisalId, L3ManagerId: firstL3ManagerId }).then((data) => {
@@ -2040,6 +2102,37 @@ module.exports = function (app) {
         } else {
           console.log("No L4 Manager found for the given employee ID");
         }
+        ///////////Sending mail to Level 4 Manager///////////
+        Employees.findOne({
+          attributes: ['officialEmail'],
+          where: { employeeId: firstL4ManagerId },
+          raw: true
+        }).then((l4ManagerDetails) => {
+          if (l4ManagerDetails) {
+            const l4ManagerEmail = l4ManagerDetails.officialEmail;
+            const htmlFilePath = path.join('Mails/mangAppMail.ejs');
+            const htmlContent = fs.readFileSync(htmlFilePath, 'utf8')
+            let mailOptions = {
+              from: 'support@timesofpeople.com',
+              to: l4ManagerEmail,
+              subject: 'You Have Been Assigned as an Evaluator',
+              text: `Dear Manager, \n\nYou have been assigned as an evaluator for an employee. Please review the employee's evaluation.\n\nRegards,\Mckinsol Consulting Inc.`,
+              html: htmlContent,
+            };
+
+            console.log(l4ManagerEmail);
+
+            transporter.sendMail(mailOptions, function (error, info) {
+              if (error) {
+                console.log(error);
+              } else {
+                console.log('Email sent to ' + l4ManagerEmail);
+              }
+            });
+          }
+        }).catch((err) => {
+          console.log("Error finding L4 Manager details: ", err);
+        });
         ////Creating a row in L4Appraisal Table///////////
         if (!(isNull(firstL4ManagerId))) {
           await L4Appraisal.create({ appraisalId: req.body.appraisalId, L4ManagerId: firstL4ManagerId }).then((data) => { console.log("Enteries created successfully in L4Appraisal Table") }).catch((err) => {
@@ -2062,6 +2155,36 @@ module.exports = function (app) {
         } else {
           console.log("No L5 Manager found for the given employee ID");
         }
+        /////////// Sending Mail to Level 5 Manager//////////
+        Employees.findOne({
+          attributes: ['officialEmail'],
+          where: { employeeId: firstL5ManagerId },
+          raw: true
+        }).then((l5ManagerDetails) => {
+          if (l5ManagerDetails) {
+            const l5ManagerEmail = l5ManagerDetails.officialEmail;
+            const htmlFilePath = path.join('Mails/mangAppMail.ejs');
+            const htmlContent = fs.readFileSync(htmlFilePath, 'utf8')
+            let mailOptions = {
+              from: 'support@timesofpeople.com',
+              to: l5ManagerEmail,
+              subject: 'You Have Been Assigned as an Evaluator',
+              text: `Dear Manager, \n\nYou have been assigned as an evaluator for an employee. Please review the employee's evaluation.\n\nRegards,\Mckinsol Consulting Inc.`,
+              html: htmlContent,
+            };
+            console.log(l5ManagerEmail);
+
+            transporter.sendMail(mailOptions, function (error, info) {
+              if (error) {
+                console.log(error);
+              } else {
+                console.log('Email sent to ' + l5ManagerEmail);
+              }
+            });
+          }
+        }).catch((err) => {
+          console.log("Error finding L5 Manager details: ", err);
+        });
         ////Creating a row in Manager Table///////////
         await Manager.create({ appraisalId: req.body.appraisalId, ManagerId: firstL5ManagerId }).then((data) => { console.log("Enteries created successfully in Manager Table") }).catch((err) => {
           console.log(err);
@@ -2193,32 +2316,32 @@ module.exports = function (app) {
         const randomSixDigitNumber = Math.floor(100000 + Math.random() * 900000);
         console.log("Random appraisalId for index value", i, "::::", randomSixDigitNumber);
         await empAppraisal.create({ appraisalId: randomSixDigitNumber, employeeId: entries[i].employeeId, createdAt: date, status: "Initiated", hrId: hrId });
-        const employee = await Employees.findOne({
-          where: {
-            employeeId: entries[i].employeeId
-          },
-          attributes: ['officialEmail']
-        }); console.log(employee); if (employee && employee.officialEmail) {
-          // Setup email data
-          const htmlFilePath = path.join('Mails/empAppMail.ejs');
-          const htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
-          const mailOptions = {
-            from: 'support@timesofpeople.com',
-            to: employee.officialEmail,
-            subject: 'Appraisal Initiated Appraisal ID : ' + res.appraisalId,
-            text: 'Your appraisal has been initiated',
-            html: htmlContent,
-          };          // Send the email
-          transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-              console.log('Error sending email:', error);
-            } else {
-              console.log('Email sent:', info.response);
-            }
-          });
-        } else {
-          console.log('Employee email not found or invalid');
-        }
+        // const employee = await Employees.findOne({
+        //   where: {
+        //     employeeId: entries[i].employeeId
+        //   },
+        //   attributes: ['officialEmail']
+        // }); console.log(employee); if (employee && employee.officialEmail) {
+        //   // Setup email data
+        //   const htmlFilePath = path.join('Mails/empAppMail.ejs');
+        //   const htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
+        //   const mailOptions = {
+        //     from: 'support@timesofpeople.com',
+        //     to: employee.officialEmail,
+        //     subject: 'Appraisal Initiated Appraisal ID : ' + res.appraisalId,
+        //     text: 'Your appraisal has been initiated',
+        //     html: htmlContent,
+        //   };          // Send the email
+        //   transporter.sendMail(mailOptions, (error, info) => {
+        //     if (error) {
+        //       console.log('Error sending email:', error);
+        //     } else {
+        //       console.log('Email sent:', info.response);
+        //     }
+        //   });
+        // } else {
+        //   console.log('Employee email not found or invalid');
+        // }
       } res.status(200).json({ "message": "Entries Created" });
     } catch (err) {
       console.log(err);
