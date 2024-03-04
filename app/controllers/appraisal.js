@@ -995,7 +995,7 @@ module.exports = function (app) {
               console.log(err);
             });
             if (L2Flag == 0) {
-              res.json({ "message": "Level 2 Evaluation is not done yet", "status": 400 });
+              res.status(400).json({ "message": "Level 2 Evaluation is not done yet" });
             }
             else {
               let check;
@@ -1150,7 +1150,7 @@ module.exports = function (app) {
 
             L3Flag = data.isEditedByL3Manager;
             if (L3Flag == 0) {
-              res.json({ "message": "Level 3 Evaluation is not done yet", "status": 400 });
+              res.status(400).json({ "message": "Level 3 Evaluation is not done yet" });
             }
             else {
               let check;
@@ -1223,14 +1223,15 @@ module.exports = function (app) {
                 // const sum = parseInt(req.body.sum);
                 const sum = req.body.communicationSkill + req.body.interpersonalSkill + req.body.abilityToPlanTheWork + req.body.problemSolving + req.body.adaptability + req.body.willingnessToShoulderAdditional + req.body.commitmentToDoAPerfectJob + req.body.habitsAndManners + req.body.presentation + req.body.punctuality + req.body.confidentialityOfInfo + req.body.trustworthiness + req.body.teamSpirit + req.body.relationshipWithColleagues + req.body.decisionMaking + req.body.computerskills;
 
-                console.log(sum);
-                const lastSum = L3Appraisal.findOne({
+                console.log("sum::::", sum);
+                const lastSum = await L3Appraisal.findOne({
                   where: { appraisalId: req.body.appraisalId }, raw: true,
                   attributes: ['L3_ManagersTotalScore'/* add more fields as needed */]
                 });
-                // console.log(sum);
-                console.log(lastSum.L3_ManagersTotalScore);
+                console.log("lastSum::::", lastSum);
+                console.log("last SUM:::::", lastSum.L3_ManagersTotalScore);
                 const finalSum = sum + lastSum.L3_ManagersTotalScore;
+                console.log("finalSum::::", finalSum);
                 const percentage = Math.floor(finalSum / 240 * 100);//total marks at level 3  is 260 which is 80 from level 1 and 90 from level 2 and 90 from level 3 .
                 console.log("Overall Percentage::::::::", percentage);
 
@@ -1291,116 +1292,6 @@ module.exports = function (app) {
               }
             }
           }
-          // if (id == L5Manager) {
-          //   try {
-          //     console.log("::::::::::::here::::::::::");
-
-          //     const [l2Data,l3Data,l4Data,managerData] = await Promise.all([
-          //       L2Appraisal.findAll({ where: { appraisalId: req.body.appraisalId }, raw: true, attributes: ['isEditedByL4Manager'] }),
-          //       L3Appraisal.findAll({ where: { appraisalId: req.body.appraisalId }, raw: true, attributes: ['isEditedByL4Manager'] }),
-          //       L4Appraisal.findAll({ where: { appraisalId: req.body.appraisalId }, raw: true, attributes: ['isEditedByL4Manager'] }),
-          //       Manager.findOne({ where: { appraisalId: req.body.appraisalId }, raw: true, attributes: ['isEditedByManager'] }),
-          //     ]);
-
-          //     let L4Flag = l4Data.length === 0 ? 1 : l4Data[0].isEditedByL4Manager;
-          //     console.log("L4Flag::::", L4Flag);
-
-          //     if (L4Flag === 0) {
-          //       res.json({ "message": "Level 4 Evaluation is not done yet", "status": 400 });
-          //     } else {
-          //       console.log("heressssssssssssssssssss");
-
-          //       let check = managerData.isEditedByManager;
-          //       console.log("check::::::", check);
-
-          //       if (check === 1) {
-          //         res.status(400).json({ "message": "Form already submitted by the manager not allowed to re-submit" });
-          //       } else {
-          //         const updateData = {
-          //           appraisalId: appraisalId,
-          //           ManagerId: id,
-          //           createdAt: date,
-          //           FSQoW_1: req.body.FSQoW1,
-          //           FSQoW_2: req.body.FSQoW2,
-          //           FSQoW_3: req.body.FSQoW3,
-          //           FSWH_1: req.body.FSWH1,
-          //           FSWH_2: req.body.FSWH2,
-          //           FSWH_3: req.body.FSWH3,
-          //           FSWH_4: req.body.FSWH4,
-          //           FSJK_1: req.body.FSJK1,
-          //           FSJK_2: req.body.FSJK2,
-          //           FSJK_3: req.body.FSJK3,
-          //           FSRemarks: req.body.FSRemarks,
-          //           ISIR_1: req.body.ISIR1,
-          //           ISIR_2: req.body.ISIR2,
-          //           ISIR_3: req.body.ISIR3,
-          //           ISIR_4: req.body.ISIR4,
-          //           ISIR_5: req.body.ISIR5,
-          //           ISIRRemarks: req.body.ISIRRemarks,
-          //           LSL_1: req.body.LSL1,
-          //           LSL_2: req.body.LSL2,
-          //           LSL_3: req.body.LSL3,
-          //           LSLRemarks: req.body.LSLRemarks,
-          //         }
-
-          //         await Manager.update(updateData, { where: { appraisalId: req.body.appraisalId } });
-
-          //         const sum = req.body.FSQoW1 + req.body.FSQoW2 + req.body.FSQoW3 + req.body.FSWH1 + req.body.FSWH2 + req.body.FSWH3 + req.body.FSWH4 + req.body.FSJK1 + req.body.FSJK2 + req.body.FSJK3 + req.body.ISIR1 + req.body.ISIR2 + req.body.ISIR3 + req.body.ISIR4 + req.body.ISIR5 + req.body.LSL1 + req.body.LSL2 + req.body.LSL3;
-
-          //         const lastLevel = await Manager.findOne({
-          //           where: { appraisalId: req.body.appraisalId },
-          //           raw: true,
-          //           attributes: ['lastLevelMaxMarks', 'lastLevelScoredMarks'],
-          //         });
-
-          //         console.log("LastLevel:::::", lastLevel);
-
-          //         const finalSum = sum + lastLevel.lastLevelScoredMarks;
-          //         console.log(sum);
-          //         console.log(finalSum);
-
-          //         const percentage = Math.floor(finalSum / (90 + lastLevel.lastLevelMaxMarks) * 100);
-          //         console.log("Overall Percentage::::::::", percentage);
-
-          //         await Manager.update(
-          //           { managersOverallPercentage: percentage, managersTotalScore: finalSum },
-          //           { where: { appraisalId: req.body.appraisalId } }
-          //         );
-
-          //         let overallRating;
-
-          //         if (1 <= percentage && percentage <= 25) {
-          //           overallRating = "Average";
-          //         } else if (26 <= percentage && percentage <= 50) {
-          //           overallRating = "Good";
-          //         } else if (51 <= percentage && percentage <= 75) {
-          //           overallRating = "Very Good";
-          //         } else if (76 <= percentage && percentage <= 100) {
-          //           overallRating = "Excellent";
-          //         }
-
-          //         console.log("OverallRating::::::::::", overallRating);
-          //         const flag = req.body.flag;
-          //         if (flag == 1) {
-
-
-
-          //           await Manager.update(
-          //             { managersOverallRating: overallRating, isEditedByManager: true },
-          //             { where: { appraisalId: req.body.appraisalId } }
-          //           );
-
-          //           await empAppraisal.update({ status: "Sent to HR" }, { where: { appraisalId: req.body.appraisalId } });
-          //         }
-
-          //         res.json({ "message": overallRating }).status(200);
-          //       }
-          //     }
-          //   } catch (error) {
-          //     console.error('Error:', error);
-          //     res.status(500).json({ "message": "Internal Server Error" });
-          //   }
-          // }
           if (id == topManager && formType == "managerEvaluation") {
             try {
               console.log("::::::::::::here::::::::::");
@@ -1421,11 +1312,11 @@ module.exports = function (app) {
               console.log("L4Flag::::", L4Flag);
 
               if (L2Flag === 0) {
-                res.json({ "message": "Level 2 Evaluation is not done yet", "status": 400 });
+                res.status(400).json({ "message": "Level 2 Evaluation is not done yet" });
               } else if (L3Flag === 0) {
-                res.json({ "message": "Level 3 Evaluation is not done yet", "status": 400 });
+                res.status(400).json({ "message": "Level 3 Evaluation is not done yet" });
               } else if (L4Flag === 0) {
-                res.json({ "message": "Level 4 Evaluation is not done yet", "status": 400 });
+                res.status(400).json({ "message": "Level 4 Evaluation is not done yet" });
               } else {
                 console.log("heressssssssssssssssssss");
 
@@ -1860,105 +1751,362 @@ module.exports = function (app) {
     }
   });
 
-  //   let flagCheck = await appraisal.findOne({where:{appraisalId:req.body.appraisalId},raw:true,attributes:['isEditedByEmp']}) ;
-  //   console.log(flagCheck);
-  //   if(flagCheck.isEditedByEmp){
-  //     res.json({
-  //       "message":"Form already edited by employee",
-  //       "flag":1
-  //     });
+  // apiRoutes.post("/employeeEvaluation", async (req, res) => { //to fill entries in the employee self evaluation form***UPDATED ACCORDING TO NEW DATABASE***
+  //   try {
+  //     const flag = req.body.flag;//0 if draft and 1 if submit
+
+
+  //     console.log(req.body);
+  //     let flagCheck = await empAppraisal.findOne({ where: { appraisalId: req.body.appraisalId }, raw: true, attributes: ['isEditedByEmp', 'status'] });
+  //     console.log(flagCheck);
+  //     if (flagCheck.isEditedByEmp || flagCheck.status == "Forwarded to the Level-2- Manager") {
+  //       res.status(400).json({
+  //         "message": "Form already edited by employee, Not allowed to re-edit the form"
+  //       });
+  //     }
+  //     else {
+  //       let firstL2ManagerId;
+  //       let firstL3ManagerId;
+  //       let firstL4ManagerId;
+  //       let firstL5ManagerId;
+  //       let firstHr;
+
+
+  //       ////Assigning Level 2 Manager///////////
+  //       const assignedL2Manager = await empMang.findAll({
+  //         attributes: ['L2ManagerId'],
+  //         where: { employeeId: req.body.employeeId }, raw: true
+  //       });
+  //       console.log("assignedL2manager::::::", assignedL2Manager);
+  //       if (assignedL2Manager.length > 0) {
+  //         // Extract the first L2ManagerId (assuming there's only one result)
+  //         firstL2ManagerId = assignedL2Manager[0].L2ManagerId;
+  //         await empAppraisal.update(
+  //           { assignedL2Manager: firstL2ManagerId },
+  //           { where: { employeeId: req.body.employeeId } }
+  //         );
+  //         console.log("L2 Manager ID:", firstL2ManagerId);
+  //       } else {
+  //         console.log("No L2 Manager found for the given employee ID");
+  //       }
+  //       /////Sending Mail to Level 2 Manager
+  //       // Employees.findOne({
+  //       //   attributes: ['officialEmail'],
+  //       //   where: { employeeId: firstL2ManagerId },
+  //       //   raw: true
+  //       // }).then((l2ManagerDetails) => {
+  //       //   if (l2ManagerDetails) {
+  //       //     const l2ManagerEmail = l2ManagerDetails.officialEmail;
+  //       //     const htmlFilePath = path.join('Mails/mangAppMail.ejs');
+  //       //     const htmlContent = fs.readFileSync(htmlFilePath, 'utf8')
+  //       //     let mailOptions = {
+  //       //       from: 'support@timesofpeople.com',
+  //       //       to: l2ManagerEmail,
+  //       //       subject: 'You Have Been Assigned as an Evaluator',
+  //       //       text: `Dear Manager, \n\nYou have been assigned as an evaluator for an employee. Please review the employee's evaluation.\n\nRegards,\Mckinsol Consulting Inc.`,
+  //       //       html: htmlContent,
+  //       //     };
+
+  //       //     console.log(l2ManagerEmail);
+
+  //       //     transporter.sendMail(mailOptions, function (error, info) {
+  //       //       if (error) {
+  //       //         console.log(error);
+  //       //       } else {
+  //       //         console.log('Email sent to ' + l2ManagerEmail);
+  //       //       }
+  //       //     });
+  //       //   }
+  //       // }).catch((err) => {
+  //       //   console.log("Error finding L2 Manager details: ", err);
+  //       // });
+  //       ////Creating a row in L2Appraisal Table///////////
+  //       await L2Appraisal.create({ appraisalId: req.body.appraisalId, L2ManagerId: firstL2ManagerId }).then((data) => {
+  //         // console.log("data at l3:::",data);
+  //         console.log("Enteries created successfully in L2Appraisal Table")
+  //       }).catch((err) => {
+  //         console.log(err);
+  //       });
+  //       //Assigning the L3 Manager //////
+  //       const assignedL3Manager = await empMang.findAll({
+  //         attributes: ['L3ManagerId'],
+  //         where: { employeeId: req.body.employeeId }, raw: true
+  //       });
+  //       console.log("assignedL3manager::::::", assignedL3Manager);
+  //       if (assignedL3Manager.length > 0) {
+  //         // Extract the first L2ManagerId (assuming there's only one result)
+  //         firstL3ManagerId = assignedL3Manager[0].L3ManagerId;
+  //         await empAppraisal.update(
+  //           { assignedL3Manager: firstL3ManagerId },
+  //           { where: { employeeId: req.body.employeeId } }
+  //         );
+  //         console.log("L3 Manager ID:", firstL3ManagerId);
+  //       } else {
+  //         console.log("No L3 Manager found for the given employee ID");
+  //       }
+  //       // //////////////Sending mail to Level3 Manager//////////
+  //       // Employees.findOne({
+  //       //   attributes: ['officialEmail'],
+  //       //   where: { employeeId: firstL3ManagerId },
+  //       //   raw: true
+  //       // }).then((l3ManagerDetails) => {
+  //       //   if (l3ManagerDetails) {
+  //       //     const l3ManagerEmail = l3ManagerDetails.officialEmail;
+  //       //     const htmlFilePath = path.join('Mails/mangAppMail.ejs');
+  //       //     const htmlContent = fs.readFileSync(htmlFilePath, 'utf8')
+  //       //     let mailOptions = {
+  //       //       from: 'support@timesofpeople.com',
+  //       //       to: l3ManagerEmail,
+  //       //       subject: 'You Have Been Assigned as an Evaluator',
+  //       //       text: `Dear Manager, \n\nYou have been assigned as an evaluator for an employee. Please review the employee's evaluation.\n\nRegards,\Mckinsol Consulting Inc.`,
+  //       //       html: htmlContent,
+  //       //     };
+
+  //       //     console.log(l3ManagerEmail);
+
+  //       //     transporter.sendMail(mailOptions, function (error, info) {
+  //       //       if (error) {
+  //       //         console.log(error);
+  //       //       } else {
+  //       //         console.log('Email sent to ' + l3ManagerEmail);
+  //       //       }
+  //       //     });
+  //       //   }
+  //       // }).catch((err) => {
+  //       //   console.log("Error finding L3 Manager details: ", err);
+  //       // });
+  //       ////Creating a row in L3Appraisal Table///////////
+  //       if (!(isNull(firstL3ManagerId))) {
+  //         await L3Appraisal.create({ appraisalId: req.body.appraisalId, L3ManagerId: firstL3ManagerId }).then((data) => {
+  //           // console.log("data at l3:::",data);
+  //           console.log("Enteries created successfully in L3Appraisal Table")
+  //         }).catch((err) => {
+  //           console.log(err);
+  //         });
+  //       }
+  //       //Assigning the L4 Manager
+  //       const assignedL4Manager = await empMang.findAll({
+  //         attributes: ['L4ManagerId'],
+  //       }, { where: { employeeId: req.body.employeeId }, raw: true })
+  //       if (assignedL4Manager.length > 0) {
+  //         // Extract the first L4ManagerId (assuming there's only one result)
+  //         firstL4ManagerId = assignedL4Manager[0].L4ManagerId;
+  //         await empAppraisal.update(
+  //           { assignedL4Manager: firstL4ManagerId },
+  //           { where: { employeeId: req.body.employeeId } }
+  //         );
+  //         console.log("L4 Manager ID:", firstL4ManagerId);
+  //       } else {
+  //         console.log("No L4 Manager found for the given employee ID");
+  //       }
+  //       ///////////Sending mail to Level 4 Manager///////////
+  //       // Employees.findOne({
+  //       //   attributes: ['officialEmail'],
+  //       //   where: { employeeId: firstL4ManagerId },
+  //       //   raw: true
+  //       // }).then((l4ManagerDetails) => {
+  //       //   if (l4ManagerDetails) {
+  //       //     const l4ManagerEmail = l4ManagerDetails.officialEmail;
+  //       //     const htmlFilePath = path.join('Mails/mangAppMail.ejs');
+  //       //     const htmlContent = fs.readFileSync(htmlFilePath, 'utf8')
+  //       //     let mailOptions = {
+  //       //       from: 'support@timesofpeople.com',
+  //       //       to: l4ManagerEmail,
+  //       //       subject: 'You Have Been Assigned as an Evaluator',
+  //       //       text: `Dear Manager, \n\nYou have been assigned as an evaluator for an employee. Please review the employee's evaluation.\n\nRegards,\Mckinsol Consulting Inc.`,
+  //       //       html: htmlContent,
+  //       //     };
+
+  //       //     console.log(l4ManagerEmail);
+
+  //       //     transporter.sendMail(mailOptions, function (error, info) {
+  //       //       if (error) {
+  //       //         console.log(error);
+  //       //       } else {
+  //       //         console.log('Email sent to ' + l4ManagerEmail);
+  //       //       }
+  //       //     });
+  //       //   }
+  //       // }).catch((err) => {
+  //       //   console.log("Error finding L4 Manager details: ", err);
+  //       // });
+  //       ////Creating a row in L4Appraisal Table///////////
+  //       if (!(isNull(firstL4ManagerId))) {
+  //         await L4Appraisal.create({ appraisalId: req.body.appraisalId, L4ManagerId: firstL4ManagerId }).then((data) => { console.log("Enteries created successfully in L4Appraisal Table") }).catch((err) => {
+  //           console.log(err);
+  //         });
+  //       }
+
+  //       //Assigning the L5 Manager
+  //       const assignedL5Manager = await empMang.findAll({
+  //         attributes: ['L5ManagerId'],
+  //       }, { where: { employeeId: req.body.employeeId }, raw: true })
+  //       if (assignedL5Manager.length > 0) {
+  //         // Extract the first L5ManagerId (assuming there's only one result)
+  //         firstL5ManagerId = assignedL5Manager[0].L5ManagerId;
+  //         await empAppraisal.update(
+  //           { assignedL5Manager: firstL5ManagerId },
+  //           { where: { employeeId: req.body.employeeId } }
+  //         );
+  //         console.log("L5 Manager ID:", firstL5ManagerId);
+  //       } else {
+  //         console.log("No L5 Manager found for the given employee ID");
+  //       }
+  //       /////////// Sending Mail to Level 5 Manager//////////
+  //       // Employees.findOne({
+  //       //   attributes: ['officialEmail'],
+  //       //   where: { employeeId: firstL5ManagerId },
+  //       //   raw: true
+  //       // }).then((l5ManagerDetails) => {
+  //       //   if (l5ManagerDetails) {
+  //       //     const l5ManagerEmail = l5ManagerDetails.officialEmail;
+  //       //     const htmlFilePath = path.join('Mails/mangAppMail.ejs');
+  //       //     const htmlContent = fs.readFileSync(htmlFilePath, 'utf8')
+  //       //     let mailOptions = {
+  //       //       from: 'support@timesofpeople.com',
+  //       //       to: l5ManagerEmail,
+  //       //       subject: 'You Have Been Assigned as an Evaluator',
+  //       //       text: `Dear Manager, \n\nYou have been assigned as an evaluator for an employee. Please review the employee's evaluation.\n\nRegards,\Mckinsol Consulting Inc.`,
+  //       //       html: htmlContent,
+  //       //     };
+  //       //     console.log(l5ManagerEmail);
+
+  //       //     transporter.sendMail(mailOptions, function (error, info) {
+  //       //       if (error) {
+  //       //         console.log(error);
+  //       //       } else {
+  //       //         console.log('Email sent to ' + l5ManagerEmail);
+  //       //       }
+  //       //     });
+  //       //   }
+  //       // }).catch((err) => {
+  //       //   console.log("Error finding L5 Manager details: ", err);
+  //       // });
+  //       ////Creating a row in Manager Table///////////
+  //       await Manager.create({ appraisalId: req.body.appraisalId, ManagerId: firstL5ManagerId }).then((data) => { console.log("Enteries created successfully in Manager Table") }).catch((err) => {
+  //         console.log(err);
+  //       });
+
+
+  //       //Assigning the hr
+  //       const hrId = await empMang.findAll({
+  //         attributes: ['hrId'],
+  //       }, { where: { employeeId: req.body.employeeId }, raw: true })
+  //       if (hrId.length > 0) {
+  //         // Extract the first hr (assuming there's only one result)
+  //         firstHr = hrId[0].hrId;
+  //         await empAppraisal.update(
+  //           { hrId: firstHr },
+  //           { where: { employeeId: req.body.employeeId } }
+  //         );
+  //         console.log("hr ID:", firstHr);
+  //       } else {
+  //         console.log("No HR found for the given employee ID");
+  //       }
+
+
+  //       const updateData = {
+  //         communicationSkill: req.body.communicationSkill,
+  //         communicationSkillRemarks: req.body.communicationSkillRemarks,
+  //         interpersonalSkill: req.body.interpersonalSkill,
+  //         interpersonalSkillRemarks: req.body.interpersonalSkillRemarks,
+  //         abilityToPlanTheWork: req.body.abilityToPlanTheWork,
+  //         abilityToPlanTheWorkRemarks: req.body.abilityToPlanTheWorkRemarks,
+  //         problemSolving: req.body.problemSolving,
+  //         problemSolvingRemarks: req.body.problemSolvingRemarks,
+  //         adaptability: req.body.adaptability,
+  //         adaptabilityRemarks: req.body.adaptabilityRemarks,
+  //         willingnessToShoulderAdditional: req.body.willingnessToShoulderAdditional,
+  //         willingnessToShoulderAdditionalRemarks: req.body.willingnessToShoulderAdditionalRemarks,
+  //         commitmentToDoAPerfectJob: req.body.commitmentToDoAPerfectJob,
+  //         commitmentToDoAPerfectJobRemarks: req.body.commitmentToDoAPerfectJobRemarks,
+  //         habitsAndManners: req.body.habitsAndManners,
+  //         habitsAndMannersRemarks: req.body.habitsAndMannersRemarks,
+  //         presentation: req.body.presentation,
+  //         presentationRemarks: req.body.presentationRemarks,
+  //         punctuality: req.body.punctuality,
+  //         punctualityRemarks: req.body.punctualityRemarks,
+  //         confidentialityOfInfo: req.body.confidentialityOfInfo,
+  //         confidentialityOfInfoRemarks: req.body.commitmentToDoAPerfectJobRemarks,
+  //         trustworthiness: req.body.trustworthiness,
+  //         trustworthinessRemarks: req.body.trustworthinessRemarks,
+  //         teamSpirit: req.body.teamSpirit,
+  //         teamSpiritRemarks: req.body.teamSpiritRemarks,
+  //         relationshipWithColleagues: req.body.relationshipWithColleagues,
+  //         relationshipWithColleaguesRemarks: req.body.relationshipWithColleaguesRemarks,
+  //         decisionMaking: req.body.decisionMaking,
+  //         decisionMakingRemarks: req.body.decisionMakingRemarks,
+  //         computerskills: req.body.computerskills,
+  //         computerskillsRemarks: req.body.computerskillsRemarks
+  //         // Add more fields as needed
+  //       };
+
+  //       const updateCondition = {
+  //         // Define the condition based on which records should be updated
+  //         // For example, to update records with id = 1:
+  //         appraisalId: req.body.appraisalId,
+  //       };
+
+  //       empAppraisal.update(updateData, {
+  //         where: updateCondition,
+  //       })
+  //         .then((data) => {
+  //           console.log("Updated Successfully");
+  //           // res.send("Updated Successfully").status(200)
+  //         })
+  //         .catch(error => {
+  //           console.error('Error updating records:', error);
+  //           // res.send(error).status(400);
+  //         });
+  //       // const sum = parseInt(req.body.sum);
+  //       const sum = req.body.communicationSkill + req.body.interpersonalSkill + req.body.abilityToPlanTheWork + req.body.problemSolving + req.body.adaptability + req.body.willingnessToShoulderAdditional + req.body.commitmentToDoAPerfectJob + req.body.habitsAndManners + req.body.presentation + req.body.punctuality + req.body.confidentialityOfInfo + req.body.trustworthiness + req.body.teamSpirit + req.body.relationshipWithColleagues + req.body.decisionMaking + req.body.computerskills;
+  //       console.log(sum);
+  //       const percentage = Math.floor(sum / 80 * 100);//the total of all 16 fields is 16*5=80
+  //       console.log("Overall Percentage::::::::", percentage);
+
+  //       empAppraisal.update({ employeeOverallPercentage: percentage, employeeTotalScore: sum }, { where: { appraisalId: req.body.appraisalId } }).then((data) => {
+  //         console.log("percentage updated successfully");
+  //       }).catch((err) => {
+  //         console.log(err);
+  //       })
+
+  //       let overallRating;
+  //       if (1 <= percentage && percentage <= 25) {
+  //         overallRating = "Average";
+  //       } else if (26 <= percentage && percentage <= 50) {
+  //         overallRating = "Good";
+  //       } else if (51 <= percentage && percentage <= 75) {
+  //         overallRating = "Very Good";
+  //       } else if (76 <= percentage && percentage <= 100) {
+  //         overallRating = "Excellent";
+  //       }
+  //       console.log("OverallRating::::::::::", overallRating);
+
+  //       empAppraisal.update({ employeeOverallRating: overallRating }, { where: { appraisalId: req.body.appraisalId } }).then((data) => {
+  //         console.log("rating updated successfully");
+  //       }).catch((err) => {
+  //         console.log(err);
+  //       })
+
+  //       if (flag == 1) {   //it means submit button has been pressed.   
+  //         empAppraisal.update({ isEditedByEmp: true, status: "Forwarded to the Level-2- Manager" }, { where: { appraisalId: req.body.appraisalId } }).then((data) => {
+  //           console.log("rating updated successfully");
+  //         }).catch((err) => {
+  //           console.log(err);
+  //         });
+  //       }
+
+  //       res.json({ "Message": overallRating }).status(200);
+  //     }
   //   }
-  //   else{
-  //   const updateData = {
-  //     communicationSkill: req.body.communicationSkill,
-  //     communicationSkillRemarks: req.body.communicationSkillRemarks,
-  //     interpersonalSkill: req.body.interpersonalSkill,
-  //     interpersonalSkillRemarks: req.body.interpersonalSkillRemarks,
-  //     abilityToPlanTheWork: req.body.abilityToPlanTheWork,
-  //     abilityToPlanTheWorkRemarks: req.body.abilityToPlanTheWorkRemarks,
-  //     problemSolving: req.body.problemSolving,
-  //     problemSolvingRemarks: req.body.problemSolvingRemarks,
-  //     adaptability: req.body.adaptability,
-  //     adaptabilityRemarks: req.body.adaptabilityRemarks,
-  //     willingnessToShoulderAdditional: req.body.willingnessToShoulderAdditional,
-  //     willingnessToShoulderAdditionalRemarks: req.body.willingnessToShoulderAdditionalRemarks,
-  //     commitmentToDoAPerfectJob: req.body.commitmentToDoAPerfectJob,
-  //     commitmentToDoAPerfectJobRemarks: req.body.commitmentToDoAPerfectJobRemarks,
-  //     habitsAndManners: req.body.habitsAndManners,
-  //     habitsAndMannersRemarks: req.body.habitsAndMannersRemarks,
-  //     presentation: req.body.presentation,
-  //     presentationRemarks: req.body.presentationRemarks,
-  //     punctuality: req.body.punctuality,
-  //     punctualityRemarks: req.body.punctualityRemarks,
-  //     confidentialityOfInfo: req.body.confidentialityOfInfo,
-  //     confidentialityOfInfoRemarks: req.body.commitmentToDoAPerfectJobRemarks,
-  //     trustworthiness: req.body.trustworthiness,
-  //     trustworthinessRemarks: req.body.trustworthinessRemarks,
-  //     teamSpirit: req.body.teamSpirit,
-  //     teamSpiritRemarks: req.body.teamSpiritRemarks,
-  //     relationshipWithColleagues: req.body.relationshipWithColleagues,
-  //     relationshipWithColleaguesRemarks: req.body.relationshipWithColleaguesRemarks,
-  //     decisionMaking: req.body.decisionMaking,
-  //     decisionMakingRemarks: req.body.decisionMakingRemarks,
-  //     computerskills: req.body.computerskills,
-  //     computerskillsRemarks: req.body.computerskillsRemarks
-  //     // Add more fields as needed
-  //   };
-
-  //   const updateCondition = {
-  //     // Define the condition based on which records should be updated
-  //     // For example, to update records with id = 1:
-  //     appraisalId: req.body.appraisalId,
-  //   };
-
-  //   appraisal.update(updateData, {
-  //     where: updateCondition,
-  //   })
-  //     .then((data) => {
-  //       console.log("Updated Successfully");
-  //       // res.send("Updated Successfully").status(200)
-  //     })
-  //     .catch(error => {
-  //       console.error('Error updating records:', error);
-  //       res.send(error).status(400);
-  //     });
-  //   const sum = parseInt(req.body.sum);
-  //   console.log(sum);
-  //   const percentage =Math.floor(sum / 80 * 100);//the total of all 16 fields is 16*5=80
-  //   console.log("Overall Percentage::::::::",percentage);
-
-  //   appraisal.update({ employeeOverallPercentage: percentage,employeeTotalScore:sum },{where:{appraisalId: req.body.appraisalId}}).then((data) => {
-  //     console.log("percentage updated successfully");
-  //   }).catch((err) => {
-  //     console.log(err);
-  //   })
-
-  //   let overallRating;
-  //   if (1 <= percentage && percentage <= 25) {
-  //     overallRating = "Average";
-  //   } else if (26 <= percentage && percentage <= 50) {
-  //     overallRating = "Good";
-  //   } else if (51 <= percentage && percentage <= 75) {
-  //     overallRating = "Very Good";
-  //   } else if (76 <= percentage && percentage <= 100) {
-  //     overallRating = "Excellent";
+  //   catch (err) {
+  //     res.status(400).json({ "message": err });
   //   }
-  //   console.log("OverallRating::::::::::",overallRating);
-  //   appraisal.update({ employeeOverallRating:overallRating,isEditedByEmp:true},{where:{ appraisalId: req.body.appraisalId}}).then((data) => {
-  //     console.log("rating updated successfully");
-  //   }).catch((err) => {
-  //     console.log(err);
-  //   })
-
-  //   res.send(overallRating).status(200);
-  // }
   // });
 
   apiRoutes.post("/employeeEvaluation", async (req, res) => { //to fill entries in the employee self evaluation form***UPDATED ACCORDING TO NEW DATABASE***
     try {
       const flag = req.body.flag;//0 if draft and 1 if submit
-
-
       console.log(req.body);
       let flagCheck = await empAppraisal.findOne({ where: { appraisalId: req.body.appraisalId }, raw: true, attributes: ['isEditedByEmp', 'status'] });
       console.log(flagCheck);
@@ -1968,246 +2116,56 @@ module.exports = function (app) {
         });
       }
       else {
-        let firstL2ManagerId;
-        let firstL3ManagerId;
-        let firstL4ManagerId;
-        let firstL5ManagerId;
-        let firstHr;
-
-
-        ////Assigning Level 2 Manager///////////
-        const assignedL2Manager = await empMang.findAll({
-          attributes: ['L2ManagerId'],
+        console.log("HERE:::::::")
+        let L2Manager;
+        let L3Manager;
+        let L4Manager;
+        let L5Manager;
+        let hr;
+        const managers = await empMang.findOne({
           where: { employeeId: req.body.employeeId }, raw: true
         });
-        console.log("assignedL2manager::::::", assignedL2Manager);
-        if (assignedL2Manager.length > 0) {
-          // Extract the first L2ManagerId (assuming there's only one result)
-          firstL2ManagerId = assignedL2Manager[0].L2ManagerId;
-          await empAppraisal.update(
-            { assignedL2Manager: firstL2ManagerId },
-            { where: { employeeId: req.body.employeeId } }
-          );
-          console.log("L2 Manager ID:", firstL2ManagerId);
-        } else {
-          console.log("No L2 Manager found for the given employee ID");
-        }
-        /////Sending Mail to Level 2 Manager
-        // Employees.findOne({
-        //   attributes: ['officialEmail'],
-        //   where: { employeeId: firstL2ManagerId },
-        //   raw: true
-        // }).then((l2ManagerDetails) => {
-        //   if (l2ManagerDetails) {
-        //     const l2ManagerEmail = l2ManagerDetails.officialEmail;
-        //     const htmlFilePath = path.join('Mails/mangAppMail.ejs');
-        //     const htmlContent = fs.readFileSync(htmlFilePath, 'utf8')
-        //     let mailOptions = {
-        //       from: 'support@timesofpeople.com',
-        //       to: l2ManagerEmail,
-        //       subject: 'You Have Been Assigned as an Evaluator',
-        //       text: `Dear Manager, \n\nYou have been assigned as an evaluator for an employee. Please review the employee's evaluation.\n\nRegards,\Mckinsol Consulting Inc.`,
-        //       html: htmlContent,
-        //     };
-
-        //     console.log(l2ManagerEmail);
-
-        //     transporter.sendMail(mailOptions, function (error, info) {
-        //       if (error) {
-        //         console.log(error);
-        //       } else {
-        //         console.log('Email sent to ' + l2ManagerEmail);
-        //       }
-        //     });
-        //   }
-        // }).catch((err) => {
-        //   console.log("Error finding L2 Manager details: ", err);
-        // });
-        ////Creating a row in L2Appraisal Table///////////
-        await L2Appraisal.create({ appraisalId: req.body.appraisalId, L2ManagerId: firstL2ManagerId }).then((data) => {
-          // console.log("data at l3:::",data);
+        console.log("managers::::", managers)
+        L2Manager = managers.L2ManagerId;
+        L3Manager = managers.L3ManagerId;
+        L4Manager = managers.L4ManagerId;
+        L5Manager = managers.L5ManagerId;
+        hr = managers.hrId;
+        console.log("L2manager::::::", L2Manager);
+        console.log("L3manager::::::", L3Manager);
+        console.log("L4manager::::::", L4Manager);
+        console.log("L5manager::::::", L5Manager);
+        console.log("hrId::::::", hr);
+        empAppraisal.update(
+          { assignedL2Manager: L2Manager, assignedL3Manager: L3Manager, assignedL4Manager: L4Manager, assignedL5Manager: L5Manager, hrId: hr },
+          { where: { employeeId: req.body.employeeId } }
+        ).then((data) => {
+          console.log("Entries created in empAppraisal");
+        })
+        //Creating a row in L2Appraisal Table ///////////
+        await L2Appraisal.create({ appraisalId: req.body.appraisalId, L2ManagerId: L2Manager }).then((data) => {
           console.log("Enteries created successfully in L2Appraisal Table")
         }).catch((err) => {
           console.log(err);
         });
-        //Assigning the L3 Manager //////
-        const assignedL3Manager = await empMang.findAll({
-          attributes: ['L3ManagerId'],
-          where: { employeeId: req.body.employeeId }, raw: true
-        });
-        console.log("assignedL3manager::::::", assignedL3Manager);
-        if (assignedL3Manager.length > 0) {
-          // Extract the first L2ManagerId (assuming there's only one result)
-          firstL3ManagerId = assignedL3Manager[0].L3ManagerId;
-          await empAppraisal.update(
-            { assignedL3Manager: firstL3ManagerId },
-            { where: { employeeId: req.body.employeeId } }
-          );
-          console.log("L3 Manager ID:", firstL3ManagerId);
-        } else {
-          console.log("No L3 Manager found for the given employee ID");
-        }
-        // //////////////Sending mail to Level3 Manager//////////
-        // Employees.findOne({
-        //   attributes: ['officialEmail'],
-        //   where: { employeeId: firstL3ManagerId },
-        //   raw: true
-        // }).then((l3ManagerDetails) => {
-        //   if (l3ManagerDetails) {
-        //     const l3ManagerEmail = l3ManagerDetails.officialEmail;
-        //     const htmlFilePath = path.join('Mails/mangAppMail.ejs');
-        //     const htmlContent = fs.readFileSync(htmlFilePath, 'utf8')
-        //     let mailOptions = {
-        //       from: 'support@timesofpeople.com',
-        //       to: l3ManagerEmail,
-        //       subject: 'You Have Been Assigned as an Evaluator',
-        //       text: `Dear Manager, \n\nYou have been assigned as an evaluator for an employee. Please review the employee's evaluation.\n\nRegards,\Mckinsol Consulting Inc.`,
-        //       html: htmlContent,
-        //     };
-
-        //     console.log(l3ManagerEmail);
-
-        //     transporter.sendMail(mailOptions, function (error, info) {
-        //       if (error) {
-        //         console.log(error);
-        //       } else {
-        //         console.log('Email sent to ' + l3ManagerEmail);
-        //       }
-        //     });
-        //   }
-        // }).catch((err) => {
-        //   console.log("Error finding L3 Manager details: ", err);
-        // });
         ////Creating a row in L3Appraisal Table///////////
-        if (!(isNull(firstL3ManagerId))) {
-          await L3Appraisal.create({ appraisalId: req.body.appraisalId, L3ManagerId: firstL3ManagerId }).then((data) => {
-            // console.log("data at l3:::",data);
+        if (!(isNull(L3Manager))) {
+          await L3Appraisal.create({ appraisalId: req.body.appraisalId, L3ManagerId: L3Manager }).then((data) => {
             console.log("Enteries created successfully in L3Appraisal Table")
           }).catch((err) => {
             console.log(err);
           });
         }
-        //Assigning the L4 Manager
-        const assignedL4Manager = await empMang.findAll({
-          attributes: ['L4ManagerId'],
-        }, { where: { employeeId: req.body.employeeId }, raw: true })
-        if (assignedL4Manager.length > 0) {
-          // Extract the first L4ManagerId (assuming there's only one result)
-          firstL4ManagerId = assignedL4Manager[0].L4ManagerId;
-          await empAppraisal.update(
-            { assignedL4Manager: firstL4ManagerId },
-            { where: { employeeId: req.body.employeeId } }
-          );
-          console.log("L4 Manager ID:", firstL4ManagerId);
-        } else {
-          console.log("No L4 Manager found for the given employee ID");
-        }
-        ///////////Sending mail to Level 4 Manager///////////
-        // Employees.findOne({
-        //   attributes: ['officialEmail'],
-        //   where: { employeeId: firstL4ManagerId },
-        //   raw: true
-        // }).then((l4ManagerDetails) => {
-        //   if (l4ManagerDetails) {
-        //     const l4ManagerEmail = l4ManagerDetails.officialEmail;
-        //     const htmlFilePath = path.join('Mails/mangAppMail.ejs');
-        //     const htmlContent = fs.readFileSync(htmlFilePath, 'utf8')
-        //     let mailOptions = {
-        //       from: 'support@timesofpeople.com',
-        //       to: l4ManagerEmail,
-        //       subject: 'You Have Been Assigned as an Evaluator',
-        //       text: `Dear Manager, \n\nYou have been assigned as an evaluator for an employee. Please review the employee's evaluation.\n\nRegards,\Mckinsol Consulting Inc.`,
-        //       html: htmlContent,
-        //     };
-
-        //     console.log(l4ManagerEmail);
-
-        //     transporter.sendMail(mailOptions, function (error, info) {
-        //       if (error) {
-        //         console.log(error);
-        //       } else {
-        //         console.log('Email sent to ' + l4ManagerEmail);
-        //       }
-        //     });
-        //   }
-        // }).catch((err) => {
-        //   console.log("Error finding L4 Manager details: ", err);
-        // });
         ////Creating a row in L4Appraisal Table///////////
-        if (!(isNull(firstL4ManagerId))) {
-          await L4Appraisal.create({ appraisalId: req.body.appraisalId, L4ManagerId: firstL4ManagerId }).then((data) => { console.log("Enteries created successfully in L4Appraisal Table") }).catch((err) => {
+        if (!(isNull(L4Manager))) {
+          await L4Appraisal.create({ appraisalId: req.body.appraisalId, L4ManagerId: L4Manager }).then((data) => { console.log("Enteries created successfully in L4Appraisal Table") }).catch((err) => {
             console.log(err);
           });
         }
-
-        //Assigning the L5 Manager
-        const assignedL5Manager = await empMang.findAll({
-          attributes: ['L5ManagerId'],
-        }, { where: { employeeId: req.body.employeeId }, raw: true })
-        if (assignedL5Manager.length > 0) {
-          // Extract the first L5ManagerId (assuming there's only one result)
-          firstL5ManagerId = assignedL5Manager[0].L5ManagerId;
-          await empAppraisal.update(
-            { assignedL5Manager: firstL5ManagerId },
-            { where: { employeeId: req.body.employeeId } }
-          );
-          console.log("L5 Manager ID:", firstL5ManagerId);
-        } else {
-          console.log("No L5 Manager found for the given employee ID");
-        }
-        /////////// Sending Mail to Level 5 Manager//////////
-        // Employees.findOne({
-        //   attributes: ['officialEmail'],
-        //   where: { employeeId: firstL5ManagerId },
-        //   raw: true
-        // }).then((l5ManagerDetails) => {
-        //   if (l5ManagerDetails) {
-        //     const l5ManagerEmail = l5ManagerDetails.officialEmail;
-        //     const htmlFilePath = path.join('Mails/mangAppMail.ejs');
-        //     const htmlContent = fs.readFileSync(htmlFilePath, 'utf8')
-        //     let mailOptions = {
-        //       from: 'support@timesofpeople.com',
-        //       to: l5ManagerEmail,
-        //       subject: 'You Have Been Assigned as an Evaluator',
-        //       text: `Dear Manager, \n\nYou have been assigned as an evaluator for an employee. Please review the employee's evaluation.\n\nRegards,\Mckinsol Consulting Inc.`,
-        //       html: htmlContent,
-        //     };
-        //     console.log(l5ManagerEmail);
-
-        //     transporter.sendMail(mailOptions, function (error, info) {
-        //       if (error) {
-        //         console.log(error);
-        //       } else {
-        //         console.log('Email sent to ' + l5ManagerEmail);
-        //       }
-        //     });
-        //   }
-        // }).catch((err) => {
-        //   console.log("Error finding L5 Manager details: ", err);
-        // });
         ////Creating a row in Manager Table///////////
-        await Manager.create({ appraisalId: req.body.appraisalId, ManagerId: firstL5ManagerId }).then((data) => { console.log("Enteries created successfully in Manager Table") }).catch((err) => {
+        await Manager.create({ appraisalId: req.body.appraisalId }).then((data) => { console.log("Enteries created successfully in Manager Table") }).catch((err) => {
           console.log(err);
         });
-
-
-        //Assigning the hr
-        const hrId = await empMang.findAll({
-          attributes: ['hrId'],
-        }, { where: { employeeId: req.body.employeeId }, raw: true })
-        if (hrId.length > 0) {
-          // Extract the first hr (assuming there's only one result)
-          firstHr = hrId[0].hrId;
-          await empAppraisal.update(
-            { hrId: firstHr },
-            { where: { employeeId: req.body.employeeId } }
-          );
-          console.log("hr ID:", firstHr);
-        } else {
-          console.log("No HR found for the given employee ID");
-        }
-
-
         const updateData = {
           communicationSkill: req.body.communicationSkill,
           communicationSkillRemarks: req.body.communicationSkillRemarks,
@@ -2243,13 +2201,11 @@ module.exports = function (app) {
           computerskillsRemarks: req.body.computerskillsRemarks
           // Add more fields as needed
         };
-
         const updateCondition = {
           // Define the condition based on which records should be updated
           // For example, to update records with id = 1:
           appraisalId: req.body.appraisalId,
         };
-
         empAppraisal.update(updateData, {
           where: updateCondition,
         })
@@ -2266,13 +2222,11 @@ module.exports = function (app) {
         console.log(sum);
         const percentage = Math.floor(sum / 80 * 100);//the total of all 16 fields is 16*5=80
         console.log("Overall Percentage::::::::", percentage);
-
         empAppraisal.update({ employeeOverallPercentage: percentage, employeeTotalScore: sum }, { where: { appraisalId: req.body.appraisalId } }).then((data) => {
           console.log("percentage updated successfully");
         }).catch((err) => {
           console.log(err);
         })
-
         let overallRating;
         if (1 <= percentage && percentage <= 25) {
           overallRating = "Average";
@@ -2284,21 +2238,18 @@ module.exports = function (app) {
           overallRating = "Excellent";
         }
         console.log("OverallRating::::::::::", overallRating);
-
         empAppraisal.update({ employeeOverallRating: overallRating }, { where: { appraisalId: req.body.appraisalId } }).then((data) => {
           console.log("rating updated successfully");
         }).catch((err) => {
           console.log(err);
         })
-
-        if (flag == 1) {   //it means submit button has been pressed.   
+        if (flag == 1) {   //it means submit button has been pressed.
           empAppraisal.update({ isEditedByEmp: true, status: "Forwarded to the Level-2- Manager" }, { where: { appraisalId: req.body.appraisalId } }).then((data) => {
             console.log("rating updated successfully");
           }).catch((err) => {
             console.log(err);
           });
         }
-
         res.json({ "Message": overallRating }).status(200);
       }
     }
@@ -2509,194 +2460,194 @@ module.exports = function (app) {
   //   }
   // });
 
-  apiRoutes.post("/empList", async (req, res) => { 
+  apiRoutes.post("/empList", async (req, res) => {
     try {
-        console.log(req.body);
-        let depId = req.body.departmentId;
-        let employeeInfo;
+      console.log(req.body);
+      let depId = req.body.departmentId;
+      let employeeInfo;
 
-        if (depId != null) {
-            employeeInfo = await Employees.findAll({
-                where: { departmentId: depId, isActive: 1 },
-                raw: true,
-                attributes: ['employeeId', [sequelize.literal('CONCAT(firstname, " ", lastName)'), 'employeeName'], 'designation']
-            });
+      if (depId != null) {
+        employeeInfo = await Employees.findAll({
+          where: { departmentId: depId, isActive: 1 },
+          raw: true,
+          attributes: ['employeeId', [sequelize.literal('CONCAT(firstname, " ", lastName)'), 'employeeName'], 'designation']
+        });
+      } else {
+        employeeInfo = await Employees.findAll({
+          where: { isActive: 1 },
+          raw: true,
+          attributes: ['employeeId', [sequelize.literal('CONCAT(firstname, " ", lastName)'), 'employeeName'], 'designation']
+        });
+      }
+
+      console.log("employee Information::::::", employeeInfo);
+
+      for (let i = 0; i < employeeInfo.length; i++) {
+        const appraisalInfo = await empAppraisal.findAll({
+          where: { employeeId: employeeInfo[i].employeeId },
+          raw: true,
+          attributes: ['appraisalId', 'employeeId', 'createdAt']
+        });
+
+        if (appraisalInfo.length == 0) {
+          let lastDate = new Date('2023-01-01');
+          let dueDate = new Date('2024-01-01');
+          employeeInfo[i]["flag"] = 0;
+          employeeInfo[i]["lastAppraisalDate"] = lastDate;
+          employeeInfo[i]["dueDate"] = dueDate;
         } else {
-            employeeInfo = await Employees.findAll({
-                where: { isActive: 1 },
-                raw: true,
-                attributes: ['employeeId', [sequelize.literal('CONCAT(firstname, " ", lastName)'), 'employeeName'], 'designation']
-            });
+          let dateArray = appraisalInfo.map(info => info.createdAt);
+          let latestDate = max(dateArray);
+          let lastAppraisalDate = latestDate;
+          let dueDate = new Date(lastAppraisalDate);
+          dueDate.setDate(dueDate.getDate() + 365);
+          let todayDate = new Date;
+          const monthDifference = differenceInMonths(todayDate, latestDate);
+
+          if (monthDifference < 12) {
+            employeeInfo[i]["flag"] = 1;
+            employeeInfo[i]["lastAppraisalDate"] = lastAppraisalDate;
+            employeeInfo[i]["dueDate"] = dueDate;
+          } else {
+            employeeInfo[i]["flag"] = 0;
+            employeeInfo[i]["lastAppraisalDate"] = lastAppraisalDate;
+            employeeInfo[i]["dueDate"] = dueDate;
+          }
         }
+      }
 
-        console.log("employee Information::::::", employeeInfo);
-
-        for (let i = 0; i < employeeInfo.length; i++) {
-            const appraisalInfo = await empAppraisal.findAll({
-                where: { employeeId: employeeInfo[i].employeeId },
-                raw: true,
-                attributes: ['appraisalId', 'employeeId', 'createdAt']
-            });
-
-            if (appraisalInfo.length == 0) {
-                let lastDate = new Date('2023-01-01');
-                let dueDate = new Date('2024-01-01');
-                employeeInfo[i]["flag"] = 0;
-                employeeInfo[i]["lastAppraisalDate"] = lastDate;
-                employeeInfo[i]["dueDate"] = dueDate;
-            } else {
-                let dateArray = appraisalInfo.map(info => info.createdAt);
-                let latestDate = max(dateArray);
-                let lastAppraisalDate = latestDate;
-                let dueDate = new Date(lastAppraisalDate);
-                dueDate.setDate(dueDate.getDate() + 365);
-                let todayDate = new Date;
-                const monthDifference = differenceInMonths(todayDate, latestDate);
-
-                if (monthDifference < 12) {
-                    employeeInfo[i]["flag"] = 1;
-                    employeeInfo[i]["lastAppraisalDate"] = lastAppraisalDate;
-                    employeeInfo[i]["dueDate"] = dueDate;
-                } else {
-                    employeeInfo[i]["flag"] = 0;
-                    employeeInfo[i]["lastAppraisalDate"] = lastAppraisalDate;
-                    employeeInfo[i]["dueDate"] = dueDate;
-                }
-            }
-        }
-
-        res.json({ "data": employeeInfo }).status(200);
+      res.json({ "data": employeeInfo }).status(200);
     } catch (err) {
-        console.log(err);
-        res.status(400).json({ "message": err });
+      console.log(err);
+      res.status(400).json({ "message": err });
     }
   });
 
-// apiRoutes.post("/empList", async (req, res) => {// ''''''New One''''''to show the list of all employees with updated table for a department
-//   try {
-//     console.log(req.body);
-//     let depId = req.body.departmentId;
-//     // await department.findOne({ where: { name: `${req.body.name}` }, raw: true }).then((data) => {
-//     //   depId = data.id;
-//     //   console.log("depId:::::::", depId);
-//     // }).catch((err) => {
-//     //   console.log(err);
-//     //   // res.send(err);
-//     // })
-//     // console.log(depInfo);
-//     // console.log(depId);
-//     if (depId != null) {
-//       let employeeInfo;
-//       await Employees.findAll({
-//         where: { departmentId: `${depId}`,isActive:1 }, raw: true,
-//         attributes: ['employeeId', [sequelize.literal('CONCAT(firstname, " ", lastName)'), 'employeeName'], 'designation',  /* add more fields as needed */]
-//       }).then((data) => {
-//         employeeInfo = data;
-//       }).catch((err) => {
-//         console.log(err);
-//         // res.send(err).status(400)
-//       });
-//       console.log("employee Information::::::", employeeInfo);
-//       // const appraisalInfo = await appraisal.findAll({where:{employeeId:294},raw:true,attributes:['appraisalId','employeeId']});
-//       // console.log("appraisalInfo",appraisalInfo);
-//       for (let i = 0; i < employeeInfo.length; i++) {
-//         const appraisalInfo = await empAppraisal.findAll({ where: { employeeId: employeeInfo[i].employeeId }, raw: true, attributes: ['appraisalId', 'employeeId', 'createdAt'] });
-//         // console.log(appraisalInfo);
-//         if (appraisalInfo.length == 0) {//here it means no appraisal has been found for this particular employee
-//           let lastDate = new Date('2023-01-01');
-//           let dueDate = new Date('2024-01-01');
-//           employeeInfo[i]["flag"] = 0;
-//           employeeInfo[i]["lastAppraisalDate"] = lastDate;
-//           employeeInfo[i]["dueDate"] = dueDate;
-//         }
-//         else {
-//           let dateArray = [];
-//           for (let j = 0; j < appraisalInfo.length; j++) {
-//             dateArray.push(appraisalInfo[j]["createdAt"]);
-//           }
-//           // console.log(dateArray);
-//           let latestDate = max(dateArray);
-//           let lastAppraisalDate = latestDate;
-//           // console.log("lastAppraisaldate:::::",lastAppraisalDate);
-//           let dueDate = new Date(lastAppraisalDate);
-//           dueDate.setDate(dueDate.getDate() + 365);
-//           // console.log("dueDate:::::::",dueDate);
-//           let todayDate = new Date;
-//           // console.log(latestDate,todayDate);
-//           const monthDifference = differenceInMonths(todayDate, latestDate);
-//           // console.log(monthDifference);
-//           if (monthDifference < 12) {
-//             employeeInfo[i]["flag"] = 1;
-//             employeeInfo[i]["lastAppraisalDate"] = lastAppraisalDate;
-//             employeeInfo[i]["dueDate"] = dueDate;
-//           }
-//           else {
-//             employeeInfo[i]["flag"] = 0;//Here it means that the last appraisal of this employee happend before 12 months and the employee is eligible for the appraisal
-//             employeeInfo[i]["lastAppraisalDate"] = lastAppraisalDate;
-//             employeeInfo[i]["dueDate"] = dueDate;
-//           }
-//         }
-//       }
-//       res.json({ "data": employeeInfo }).status(200);
-//     }
-//     else{
-//       await Employees.findAll({where:{isActive:1},raw: true,
-//         attributes: ['employeeId', [sequelize.literal('CONCAT(firstname, " ", lastName)'), 'employeeName'], 'designation',  /* add more fields as needed */]
-//       }).then((data) => {
-//         employeeInfo = data;
-//       }).catch((err) => {
-//         console.log(err);
-//         // res.send(err).status(400)
-//       });
-//       console.log("employee Information::::::", employeeInfo);
-//       // const appraisalInfo = await appraisal.findAll({where:{employeeId:294},raw:true,attributes:['appraisalId','employeeId']});
-//       // console.log("appraisalInfo",appraisalInfo);
-//       for (let i = 0; i < employeeInfo.length; i++) {
-//         const appraisalInfo = await empAppraisal.findAll({ where: { employeeId: employeeInfo[i].employeeId }, raw: true, attributes: ['appraisalId', 'employeeId', 'createdAt'] });
-//         // console.log(appraisalInfo);
-//         if (appraisalInfo.length == 0) {//here it means no appraisal has been found for this particular employee
-//           let lastDate = new Date('2023-01-01');
-//           let dueDate = new Date('2024-01-01');
-//           employeeInfo[i]["flag"] = 0;
-//           employeeInfo[i]["lastAppraisalDate"] = lastDate;
-//           employeeInfo[i]["dueDate"] = dueDate;
-//         }
-//         else {
-//           let dateArray = [];
-//           for (let j = 0; j < appraisalInfo.length; j++) {
-//             dateArray.push(appraisalInfo[j]["createdAt"]);
-//           }
-//           // console.log(dateArray);
-//           let latestDate = max(dateArray);
-//           let lastAppraisalDate = latestDate;
-//           // console.log("lastAppraisaldate:::::",lastAppraisalDate);
-//           let dueDate = new Date(lastAppraisalDate);
-//           dueDate.setDate(dueDate.getDate() + 365);
-//           // console.log("dueDate:::::::",dueDate);
-//           let todayDate = new Date;
-//           // console.log(latestDate,todayDate);
-//           const monthDifference = differenceInMonths(todayDate, latestDate);
-//           // console.log(monthDifference);
-//           if (monthDifference < 12) {
-//             employeeInfo[i]["flag"] = 1;
-//             employeeInfo[i]["lastAppraisalDate"] = lastAppraisalDate;
-//             employeeInfo[i]["dueDate"] = dueDate;
-//           }
-//           else {
-//             employeeInfo[i]["flag"] = 0;//Here it means that the last appraisal of this employee happend before 12 months and the employee is eligible for the appraisal
-//             employeeInfo[i]["lastAppraisalDate"] = lastAppraisalDate;
-//             employeeInfo[i]["dueDate"] = dueDate;
-//           }
-//         }
-//       }
-//     }
-//     res.json({ "data": employeeInfo }).status(200);
-//   }
-//   catch (err) {
-//     res.status(400).json({ "message": err });
-//   }
-// });
-  
+  // apiRoutes.post("/empList", async (req, res) => {// ''''''New One''''''to show the list of all employees with updated table for a department
+  //   try {
+  //     console.log(req.body);
+  //     let depId = req.body.departmentId;
+  //     // await department.findOne({ where: { name: `${req.body.name}` }, raw: true }).then((data) => {
+  //     //   depId = data.id;
+  //     //   console.log("depId:::::::", depId);
+  //     // }).catch((err) => {
+  //     //   console.log(err);
+  //     //   // res.send(err);
+  //     // })
+  //     // console.log(depInfo);
+  //     // console.log(depId);
+  //     if (depId != null) {
+  //       let employeeInfo;
+  //       await Employees.findAll({
+  //         where: { departmentId: `${depId}`,isActive:1 }, raw: true,
+  //         attributes: ['employeeId', [sequelize.literal('CONCAT(firstname, " ", lastName)'), 'employeeName'], 'designation',  /* add more fields as needed */]
+  //       }).then((data) => {
+  //         employeeInfo = data;
+  //       }).catch((err) => {
+  //         console.log(err);
+  //         // res.send(err).status(400)
+  //       });
+  //       console.log("employee Information::::::", employeeInfo);
+  //       // const appraisalInfo = await appraisal.findAll({where:{employeeId:294},raw:true,attributes:['appraisalId','employeeId']});
+  //       // console.log("appraisalInfo",appraisalInfo);
+  //       for (let i = 0; i < employeeInfo.length; i++) {
+  //         const appraisalInfo = await empAppraisal.findAll({ where: { employeeId: employeeInfo[i].employeeId }, raw: true, attributes: ['appraisalId', 'employeeId', 'createdAt'] });
+  //         // console.log(appraisalInfo);
+  //         if (appraisalInfo.length == 0) {//here it means no appraisal has been found for this particular employee
+  //           let lastDate = new Date('2023-01-01');
+  //           let dueDate = new Date('2024-01-01');
+  //           employeeInfo[i]["flag"] = 0;
+  //           employeeInfo[i]["lastAppraisalDate"] = lastDate;
+  //           employeeInfo[i]["dueDate"] = dueDate;
+  //         }
+  //         else {
+  //           let dateArray = [];
+  //           for (let j = 0; j < appraisalInfo.length; j++) {
+  //             dateArray.push(appraisalInfo[j]["createdAt"]);
+  //           }
+  //           // console.log(dateArray);
+  //           let latestDate = max(dateArray);
+  //           let lastAppraisalDate = latestDate;
+  //           // console.log("lastAppraisaldate:::::",lastAppraisalDate);
+  //           let dueDate = new Date(lastAppraisalDate);
+  //           dueDate.setDate(dueDate.getDate() + 365);
+  //           // console.log("dueDate:::::::",dueDate);
+  //           let todayDate = new Date;
+  //           // console.log(latestDate,todayDate);
+  //           const monthDifference = differenceInMonths(todayDate, latestDate);
+  //           // console.log(monthDifference);
+  //           if (monthDifference < 12) {
+  //             employeeInfo[i]["flag"] = 1;
+  //             employeeInfo[i]["lastAppraisalDate"] = lastAppraisalDate;
+  //             employeeInfo[i]["dueDate"] = dueDate;
+  //           }
+  //           else {
+  //             employeeInfo[i]["flag"] = 0;//Here it means that the last appraisal of this employee happend before 12 months and the employee is eligible for the appraisal
+  //             employeeInfo[i]["lastAppraisalDate"] = lastAppraisalDate;
+  //             employeeInfo[i]["dueDate"] = dueDate;
+  //           }
+  //         }
+  //       }
+  //       res.json({ "data": employeeInfo }).status(200);
+  //     }
+  //     else{
+  //       await Employees.findAll({where:{isActive:1},raw: true,
+  //         attributes: ['employeeId', [sequelize.literal('CONCAT(firstname, " ", lastName)'), 'employeeName'], 'designation',  /* add more fields as needed */]
+  //       }).then((data) => {
+  //         employeeInfo = data;
+  //       }).catch((err) => {
+  //         console.log(err);
+  //         // res.send(err).status(400)
+  //       });
+  //       console.log("employee Information::::::", employeeInfo);
+  //       // const appraisalInfo = await appraisal.findAll({where:{employeeId:294},raw:true,attributes:['appraisalId','employeeId']});
+  //       // console.log("appraisalInfo",appraisalInfo);
+  //       for (let i = 0; i < employeeInfo.length; i++) {
+  //         const appraisalInfo = await empAppraisal.findAll({ where: { employeeId: employeeInfo[i].employeeId }, raw: true, attributes: ['appraisalId', 'employeeId', 'createdAt'] });
+  //         // console.log(appraisalInfo);
+  //         if (appraisalInfo.length == 0) {//here it means no appraisal has been found for this particular employee
+  //           let lastDate = new Date('2023-01-01');
+  //           let dueDate = new Date('2024-01-01');
+  //           employeeInfo[i]["flag"] = 0;
+  //           employeeInfo[i]["lastAppraisalDate"] = lastDate;
+  //           employeeInfo[i]["dueDate"] = dueDate;
+  //         }
+  //         else {
+  //           let dateArray = [];
+  //           for (let j = 0; j < appraisalInfo.length; j++) {
+  //             dateArray.push(appraisalInfo[j]["createdAt"]);
+  //           }
+  //           // console.log(dateArray);
+  //           let latestDate = max(dateArray);
+  //           let lastAppraisalDate = latestDate;
+  //           // console.log("lastAppraisaldate:::::",lastAppraisalDate);
+  //           let dueDate = new Date(lastAppraisalDate);
+  //           dueDate.setDate(dueDate.getDate() + 365);
+  //           // console.log("dueDate:::::::",dueDate);
+  //           let todayDate = new Date;
+  //           // console.log(latestDate,todayDate);
+  //           const monthDifference = differenceInMonths(todayDate, latestDate);
+  //           // console.log(monthDifference);
+  //           if (monthDifference < 12) {
+  //             employeeInfo[i]["flag"] = 1;
+  //             employeeInfo[i]["lastAppraisalDate"] = lastAppraisalDate;
+  //             employeeInfo[i]["dueDate"] = dueDate;
+  //           }
+  //           else {
+  //             employeeInfo[i]["flag"] = 0;//Here it means that the last appraisal of this employee happend before 12 months and the employee is eligible for the appraisal
+  //             employeeInfo[i]["lastAppraisalDate"] = lastAppraisalDate;
+  //             employeeInfo[i]["dueDate"] = dueDate;
+  //           }
+  //         }
+  //       }
+  //     }
+  //     res.json({ "data": employeeInfo }).status(200);
+  //   }
+  //   catch (err) {
+  //     res.status(400).json({ "message": err });
+  //   }
+  // });
+
   apiRoutes.post("/departments", async (req, res) => {// to show all the departments
     try {
 
@@ -2915,30 +2866,30 @@ module.exports = function (app) {
       const depId = req.body.departmentId;
       console.log("id:::::", id)
       console.log("departmentid:::::", depId)
-      if(depId != null){
-      const rawQuery = `SELECT CONCAT(E.firstname, CONCAT(" ",E.lastName)) AS name,E.designation,A.appraisalId,A.createdAt,A.status,A.employeeId,D.name AS department FROM ((employees AS E INNER JOIN empappraisals AS A ON E.employeeId = A.employeeId)INNER JOIN departments AS D ON D.id = E.departmentId)INNER JOIN empmangs AS M ON A.employeeId = M.employeeId  WHERE M.hrID = ${id} AND D.id = ${depId}`;
-      sequelize.query(rawQuery, {
-        type: Sequelize.QueryTypes.SELECT,
-      }).then((data) => {
-        console.log(data);
-        res.json({ "data": data }).status(200);
-      }).catch((err) => {
-        console.log(err);
-        // res.send(err).status(400);
-      })
-    }
-    else{
-      const rawQuery = `SELECT CONCAT(E.firstname, CONCAT(" ",E.lastName)) AS name,E.designation,A.appraisalId,A.createdAt,A.status,A.employeeId,D.name AS department FROM ((employees AS E INNER JOIN empappraisals AS A ON E.employeeId = A.employeeId)INNER JOIN departments AS D ON D.id = E.departmentId)INNER JOIN empmangs AS M ON A.employeeId = M.employeeId  WHERE M.hrID = ${id}`;
-      sequelize.query(rawQuery, {
-        type: Sequelize.QueryTypes.SELECT,
-      }).then((data) => {
-        console.log(data);
-        res.json({ "data": data }).status(200);
-      }).catch((err) => {
-        console.log(err);
-        // res.send(err).status(400);
-      })
-    }
+      if (depId != null) {
+        const rawQuery = `SELECT CONCAT(E.firstname, CONCAT(" ",E.lastName)) AS name,E.designation,A.appraisalId,A.createdAt,A.status,A.employeeId,D.name AS department FROM ((employees AS E INNER JOIN empappraisals AS A ON E.employeeId = A.employeeId)INNER JOIN departments AS D ON D.id = E.departmentId)INNER JOIN empmangs AS M ON A.employeeId = M.employeeId  WHERE M.hrID = ${id} AND D.id = ${depId}`;
+        sequelize.query(rawQuery, {
+          type: Sequelize.QueryTypes.SELECT,
+        }).then((data) => {
+          console.log(data);
+          res.json({ "data": data }).status(200);
+        }).catch((err) => {
+          console.log(err);
+          // res.send(err).status(400);
+        })
+      }
+      else {
+        const rawQuery = `SELECT CONCAT(E.firstname, CONCAT(" ",E.lastName)) AS name,E.designation,A.appraisalId,A.createdAt,A.status,A.employeeId,D.name AS department FROM ((employees AS E INNER JOIN empappraisals AS A ON E.employeeId = A.employeeId)INNER JOIN departments AS D ON D.id = E.departmentId)INNER JOIN empmangs AS M ON A.employeeId = M.employeeId  WHERE M.hrID = ${id}`;
+        sequelize.query(rawQuery, {
+          type: Sequelize.QueryTypes.SELECT,
+        }).then((data) => {
+          console.log(data);
+          res.json({ "data": data }).status(200);
+        }).catch((err) => {
+          console.log(err);
+          // res.send(err).status(400);
+        })
+      }
     } catch (error) {
       console.error("Error fetching appraisal list:", error);
       res.status(500).json({ error: "Internal Server Error" });
@@ -3194,7 +3145,7 @@ module.exports = function (app) {
       let l3Details;
       let l4Details;
       let l5Details;
-      let employeeId ;
+      let employeeId;
       await empAppraisal.findOne({ where: { appraisalId: id }, raw: true }).then((data) => {
         if (data) {
           employeeId = data.employeeId;
@@ -3202,19 +3153,19 @@ module.exports = function (app) {
       }).catch((err) => {
         console.log(err);
       });
-      console.log("employeeId:::::",employeeId);
+      console.log("employeeId:::::", employeeId);
       let details;
-      await empMang.findOne({where:{employeeId:employeeId}, raw: true, attributes: ['employeeId', 'L2ManagerId', 'L3ManagerId', 'L4ManagerId', 'L5ManagerId', 'hrId'] }).then((data) => {
+      await empMang.findOne({ where: { employeeId: employeeId }, raw: true, attributes: ['employeeId', 'L2ManagerId', 'L3ManagerId', 'L4ManagerId', 'L5ManagerId', 'hrId'] }).then((data) => {
         console.log("data::::::", data)
         details = data;
         // res.send(data).status(200)
         console.log(data);
       }).catch((err) => {
         console.log(err);
-        
+
       });
 
-      console.log("details::::",details);
+      console.log("details::::", details);
       await empAppraisal.findOne({ where: { appraisalId: id }, raw: true }).then((data) => {
         if (data) {
           empDetails = data;
@@ -3262,7 +3213,7 @@ module.exports = function (app) {
       let topManager;
       if (details.L5ManagerId != null) {
         topManager = details.L5ManagerId;
-      } else if (deta.L4ManagerId != null) {
+      } else if (details.L4ManagerId != null) {
         topManager = details.L4ManagerId;
       } else if (details.L3ManagerId != null) {
         topManager = details.L3ManagerId;
@@ -3272,33 +3223,33 @@ module.exports = function (app) {
         // All managers are null
         topManager = null;
       }
-      console.log("topmanager:::",topManager);
-      if(managerId == details.L2ManagerId){
-        if(managerId == topManager){
-          result.push(empDetails,l2Details,l5Details);
+      console.log("topmanager:::", topManager);
+      if (managerId == details.L2ManagerId) {
+        if (managerId == topManager) {
+          result.push(empDetails, l2Details, l5Details);
         }
-        else{
-          result.push(empDetails,l2Details)
-        }
-      }
-      if(managerId == details.L3ManagerId){
-        if(managerId == topManager){
-          result.push(empDetails,l2Details,l3Details,l5Details);
-        }
-        else{
-          result.push(empDetails,l2Details,l3Details)
+        else {
+          result.push(empDetails, l2Details)
         }
       }
-      if(managerId == details.L4ManagerId){
-        if(managerId == topManager){
-          result.push(empDetails,l2Details,l3Details,l4Details,l5Details)
+      if (managerId == details.L3ManagerId) {
+        if (managerId == topManager) {
+          result.push(empDetails, l2Details, l3Details, l5Details);
         }
-        else{
-          result.push(empDetails,l2Details,l3Details,l4Details)
+        else {
+          result.push(empDetails, l2Details, l3Details)
         }
       }
-      if(managerId == details.L5ManagerId || managerId == details.hrId){
-        result.push(empDetails,l2Details,l3Details,l4Details,l5Details)
+      if (managerId == details.L4ManagerId) {
+        if (managerId == topManager) {
+          result.push(empDetails, l2Details, l3Details, l4Details, l5Details)
+        }
+        else {
+          result.push(empDetails, l2Details, l3Details, l4Details)
+        }
+      }
+      if (managerId == details.L5ManagerId || managerId == details.hrId) {
+        result.push(empDetails, l2Details, l3Details, l4Details, l5Details)
       }
       // if(managerId == top)
       // result.push(empDetails, l2Details, l3Details, l4Details, l5Details)
@@ -3314,16 +3265,16 @@ module.exports = function (app) {
   //   try {
   //     console.log(req.body);
   //     const { employeeId, appraisalId } = req.body;
-      
+
   //     let result = [];
-      
+
   //     const empDetails = await empAppraisal.findOne({ where: { appraisalId }, raw: true });
   //     const details = await empMang.findOne({ where: { employeeId }, raw: true, attributes: ['L2ManagerId', 'L3ManagerId', 'L4ManagerId', 'L5ManagerId', 'hrId'] });
   //     const l2Details = await L2Appraisal.findOne({ where: { appraisalId }, raw: true });
   //     const l3Details = await L3Appraisal.findOne({ where: { appraisalId }, raw: true });
   //     const l4Details = await L4Appraisal.findOne({ where: { appraisalId }, raw: true });
   //     const l5Details = await Manager.findOne({ where: { appraisalId }, raw: true });
-  
+
   //     let topManager = null;
   //     if (details && details.L5ManagerId != null) {
   //       topManager = details.L5ManagerId;
@@ -3334,9 +3285,9 @@ module.exports = function (app) {
   //     } else if (details && details.L2ManagerId != null) {
   //       topManager = details.L2ManagerId;
   //     }
-  
+
   //     console.log("topmanager:::", topManager);
-  
+
   //     if (employeeId === details.L2ManagerId) {
   //       if (employeeId === topManager) {
   //         result.push(empDetails, l2Details, l5Details);
@@ -3361,23 +3312,21 @@ module.exports = function (app) {
   //     if (employeeId === details.L5ManagerId || employeeId === details.hrId) {
   //       result.push(empDetails, l2Details, l3Details, l4Details, l5Details);
   //     }
-  
+
   //     res.json({ "data": result }).status(200);
   //   } catch (e) {
   //     console.log(e);
   //     res.status(400).json({ "message": e });
   //   }
   // });
-  
-  
+
 
   apiRoutes.post('/employees', async (req, res) => {//It is used to generate all employee list
     try {
 
 
       Employees.findAll({
-        attributes: [
-          'employeeId',
+        where: { isActive: 1 }, attributes: ['employeeId',
           [sequelize.literal('CONCAT(firstname, " ", lastName)'), 'Name'], 'designation'
         ], raw: true
       }).then((data) => {
@@ -3591,59 +3540,59 @@ module.exports = function (app) {
 
   apiRoutes.post('/empMang', async (req, res) => { //   Replacement for empmangStore and empmangUpdate
     try {
-        console.log("req.body", req.body);
-        console.log("entries[0].employee::::::::", req.body.entries);
-        
-        const entries = req.body.entries;
+      console.log("req.body", req.body);
+      console.log("entries[0].employee::::::::", req.body.entries);
 
-        for (let i = 0; i < entries.length; i++) {
-            let emp = entries[i].employee;
-            let l2 = entries[i].l2Manager;
-            let l3 = entries[i].l3Manager;
-            let l4 = entries[i].l4Manager;
-            let l5 = entries[i].l5Manager;
-            let hr = entries[i].hr;
+      const entries = req.body.entries;
 
-            // Check if employee manager data exists
-            let existingData = await empMang.findOne({ where: { employeeId: emp } });
+      for (let i = 0; i < entries.length; i++) {
+        let emp = entries[i].employee;
+        let l2 = entries[i].l2Manager;
+        let l3 = entries[i].l3Manager;
+        let l4 = entries[i].l4Manager;
+        let l5 = entries[i].l5Manager;
+        let hr = entries[i].hr;
 
-            if (existingData) {
-                // Update managers
-                await empMang.update({ 
-                    L2ManagerId: l2,
-                    L3ManagerId: l3,
-                    L4ManagerId: l4,
-                    L5ManagerId: l5,
-                    hrId: hr
-                }, { where: { employeeId: emp } });
-                
-                console.log("Entry updated for employee:", emp);
-            } else {
-                // Check if employee and manager are the same
-                if (emp == l2 || emp == l3 || emp == l4 || emp == l5 || emp == hr) {
-                    return res.status(400).json({ "message": "Employee and manager cannot be the same" });
-                }
-                
-                // Create new entry
-                await empMang.create({ 
-                    employeeId: emp,
-                    L2ManagerId: l2,
-                    L3ManagerId: l3,
-                    L4ManagerId: l4,
-                    L5ManagerId: l5,
-                    hrId: hr 
-                });
-                
-                console.log("Entry created for employee:", emp);
-            }
+        // Check if employee manager data exists
+        let existingData = await empMang.findOne({ where: { employeeId: emp } });
+
+        if (existingData) {
+          // Update managers
+          await empMang.update({
+            L2ManagerId: l2,
+            L3ManagerId: l3,
+            L4ManagerId: l4,
+            L5ManagerId: l5,
+            hrId: hr
+          }, { where: { employeeId: emp } });
+
+          console.log("Entry updated for employee:", emp);
+        } else {
+          // Check if employee and manager are the same
+          if (emp == l2 || emp == l3 || emp == l4 || emp == l5 || emp == hr) {
+            return res.status(400).json({ "message": "Employee and manager cannot be the same" });
+          }
+
+          // Create new entry
+          await empMang.create({
+            employeeId: emp,
+            L2ManagerId: l2,
+            L3ManagerId: l3,
+            L4ManagerId: l4,
+            L5ManagerId: l5,
+            hrId: hr
+          });
+
+          console.log("Entry created for employee:", emp);
         }
+      }
 
-        res.json({ "message": "Entries Created" }).status(200);
+      res.json({ "message": "Entries Created" }).status(200);
     } catch (e) {
-        console.log(e);
-        res.status(400).json({ "message": e });
+      console.log(e);
+      res.status(400).json({ "message": e });
     }
-});
+  });
 
   apiRoutes.get("/", function (req, res) {
     res.send({ status: true, message: "Please enter the correct endpoint" });
