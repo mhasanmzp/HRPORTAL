@@ -3321,10 +3321,8 @@ module.exports = function (app) {
   // });
 
 
-  apiRoutes.post('/employees', async (req, res) => {//It is used to generate all employee list
+  apiRoutes.post('/employees', async (req, res) => {//It is used to generate all active employee list
     try {
-
-
       Employees.findAll({
         where: { isActive: 1 }, attributes: ['employeeId',
           [sequelize.literal('CONCAT(firstname, " ", lastName)'), 'Name'], 'designation'
