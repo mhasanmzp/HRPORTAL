@@ -1740,7 +1740,7 @@ module.exports = function (app) {
         type: Sequelize.QueryTypes.SELECT,
       }).then((data) => {
         console.log(data);
-        res.json({ "data": data }).status(200);
+        res.json({ data }).status(200);
       }).catch((err) => {
         console.log(err);
         // res.send(err).status(400);
@@ -2148,7 +2148,7 @@ module.exports = function (app) {
         }).catch((err) => {
           console.log(err);
         });
-        ////Creating a row in L3Appraisal Table///////////
+        ////Creating a row in L3Appraisal Table////////
         if (!(isNull(L3Manager))) {
           await L3Appraisal.create({ appraisalId: req.body.appraisalId, L3ManagerId: L3Manager }).then((data) => {
             console.log("Enteries created successfully in L3Appraisal Table")
@@ -2218,8 +2218,26 @@ module.exports = function (app) {
             // res.send(error).status(400);
           });
         // const sum = parseInt(req.body.sum);
-        const sum = req.body.communicationSkill + req.body.interpersonalSkill + req.body.abilityToPlanTheWork + req.body.problemSolving + req.body.adaptability + req.body.willingnessToShoulderAdditional + req.body.commitmentToDoAPerfectJob + req.body.habitsAndManners + req.body.presentation + req.body.punctuality + req.body.confidentialityOfInfo + req.body.trustworthiness + req.body.teamSpirit + req.body.relationshipWithColleagues + req.body.decisionMaking + req.body.computerskills;
+        // const sum = parseIntreq.body.communicationSkill + req.body.interpersonalSkill + req.body.abilityToPlanTheWork + req.body.problemSolving + req.body.adaptability + req.body.willingnessToShoulderAdditional + req.body.commitmentToDoAPerfectJob + req.body.habitsAndManners + req.body.presentation + req.body.punctuality + req.body.confidentialityOfInfo + req.body.trustworthiness + req.body.teamSpirit + req.body.relationshipWithColleagues + req.body.decisionMaking + req.body.computerskills;
+        const sum = parseInt(req.body.communicationSkill) + 
+            parseInt(req.body.interpersonalSkill) + 
+            parseInt(req.body.abilityToPlanTheWork) + 
+            parseInt(req.body.problemSolving) + 
+            parseInt(req.body.adaptability) + 
+            parseInt(req.body.willingnessToShoulderAdditional) + 
+            parseInt(req.body.commitmentToDoAPerfectJob) + 
+            parseInt(req.body.habitsAndManners) + 
+            parseInt(req.body.presentation) + 
+            parseInt(req.body.punctuality) + 
+            parseInt(req.body.confidentialityOfInfo) + 
+            parseInt(req.body.trustworthiness) + 
+            parseInt(req.body.teamSpirit) + 
+            parseInt(req.body.relationshipWithColleagues) + 
+            parseInt(req.body.decisionMaking) + 
+            parseInt(req.body.computerskills);
+
         console.log(sum);
+
         const percentage = Math.floor(sum / 80 * 100);//the total of all 16 fields is 16*5=80
         console.log("Overall Percentage::::::::", percentage);
         empAppraisal.update({ employeeOverallPercentage: percentage, employeeTotalScore: sum }, { where: { appraisalId: req.body.appraisalId } }).then((data) => {
@@ -3591,6 +3609,163 @@ module.exports = function (app) {
       res.status(400).json({ "message": e });
     }
   });
+
+  apiRoutes.post('/employeeForm',async(req,res)=>{
+    try{
+      const traits = [
+      {
+        factors: 'Communication Skills',
+        excellent: 5,
+        veryGood: 4,
+        good: 3,
+        average: 2,
+        formControlName: 'communicationSkill',
+        formControlRemarks: 'communicationSkillRemarks',
+      },
+      {
+        factors: 'Interpersonal Skills',
+        excellent: 5,
+        veryGood: 4,
+        good: 3,
+        average: 2,
+        formControlName: 'interpersonalSkill',
+        formControlRemarks: 'interpersonalSkillRemarks',
+      },
+      {
+        factors: 'Ability To Plan The Work',
+        excellent: 5,
+        veryGood: 4,
+        good: 3,
+        average: 2,
+        formControlName: 'abilityToPlanTheWork',
+        formControlRemarks: 'abilityToPlanTheWorkRemarks',
+      },
+      {
+        factors: 'Problem Solving',
+        excellent: 5,
+        veryGood: 4,
+        good: 3,
+        average: 2,
+        formControlName: 'problemSolving',
+        formControlRemarks: 'problemSolvingRemarks',
+      },
+      {
+        factors: 'Adaptability/Flexibility',
+        excellent: 5,
+        veryGood: 4,
+        good: 3,
+        average: 2,
+        formControlName: 'adaptability',
+        formControlRemarks: 'adaptabilityRemarks',
+      },
+      {
+        factors: 'Willingness to Shoulder Additional Responsibilities',
+        excellent: 5,
+        veryGood: 4,
+        good: 3,
+        average: 2,
+        formControlName: 'willingnessToShoulderAdditional',
+        formControlRemarks: 'willingnessToShoulderAdditionalRemarks',
+      },
+      {
+        factors: 'Commitment to do a Perfect Job',
+        excellent: 5,
+        veryGood: 4,
+        good: 3,
+        average: 2,
+        formControlName: 'commitmentToDoAPerfectJob',
+        formControlRemarks: 'commitmentToDoAPerfectJobRemarks',
+      },
+      {
+        factors: 'Habits and Manners',
+        excellent: 5,
+        veryGood: 4,
+        good: 3,
+        average: 2,
+        formControlName: 'habitsAndManners',
+        formControlRemarks: 'habitsAndMannersRemarks',
+      },
+      {
+        factors: 'Presentation/Dress',
+        excellent: 5,
+        veryGood: 4,
+        good: 3,
+        average: 2,
+        formControlName: 'presentation',
+        formControlRemarks: 'presentationRemarks',
+      },
+      {
+        factors: 'Punctuality',
+        excellent: 5,
+        veryGood: 4,
+        good: 3,
+        average: 2,
+        formControlName: 'punctuality',
+        formControlRemarks: 'punctualityRemarks',
+      },
+      {
+        factors: 'Confidentiality of information/official secret /documents',
+        excellent: 5,
+        veryGood: 4,
+        good: 3,
+        average: 2,
+        formControlName: 'confidentialityOfInfo',
+        formControlRemarks: 'confidentialityOfInfoRemarks',
+      },
+      {
+        factors: 'Trustworthiness/Reliability',
+        excellent: 5,
+        veryGood: 4,
+        good: 3,
+        average: 2,
+        formControlName: 'trustworthiness',
+        formControlRemarks: 'trustworthinessRemarks',
+      },
+      {
+        factors: 'Team spirit/Team work',
+        excellent: 5,
+        veryGood: 4,
+        good: 3,
+        average: 2,
+        formControlName: 'teamSpirit',
+        formControlRemarks: 'teamSpiritRemarks',
+      },
+      {
+        factors: 'Relationship with colleagues',
+        excellent: 5,
+        veryGood: 4,
+        good: 3,
+        average: 2,
+        formControlName: 'relationshipWithColleagues',
+        formControlRemarks: 'relationshipWithColleaguesRemarks',
+      },
+      {
+        factors: 'Decision making',
+        excellent: 5,
+        veryGood: 4,
+        good: 3,
+        average: 2,
+        formControlName: 'decisionMaking',
+        formControlRemarks: 'decisionMakingRemarks',
+      },
+      {
+        factors: 'Computer skills',
+        excellent: 5,
+        veryGood: 4,
+        good: 3,
+        average: 2,
+        formControlName: 'computerskills',
+        formControlRemarks: 'computerskillsRemarks',
+      },
+    ];
+    res.json({traits}).status(200);
+  }
+    catch(err){
+      res.status(400).json({err});
+    }
+  });
+
+
 
   apiRoutes.get("/", function (req, res) {
     res.send({ status: true, message: "Please enter the correct endpoint" });
