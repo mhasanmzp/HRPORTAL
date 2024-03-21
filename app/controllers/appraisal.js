@@ -913,7 +913,24 @@ module.exports = function (app) {
                 });
 
               // const sum = parseInt(req.body.sum);
-              const sum = req.body.communicationSkill + req.body.interpersonalSkill + req.body.abilityToPlanTheWork + req.body.problemSolving + req.body.adaptability + req.body.willingnessToShoulderAdditional + req.body.commitmentToDoAPerfectJob + req.body.habitsAndManners + req.body.presentation + req.body.punctuality + req.body.confidentialityOfInfo + req.body.trustworthiness + req.body.teamSpirit + req.body.relationshipWithColleagues + req.body.decisionMaking + req.body.computerskills;
+              const sum =
+                parseInt(req.body.communicationSkill) +
+                parseInt(req.body.interpersonalSkill) +
+                parseInt(req.body.abilityToPlanTheWork) +
+                parseInt(req.body.problemSolving) +
+                parseInt(req.body.adaptability) +
+                parseInt(req.body.willingnessToShoulderAdditional) +
+                parseInt(req.body.commitmentToDoAPerfectJob) +
+                parseInt(req.body.habitsAndManners) +
+                parseInt(req.body.presentation) +
+                parseInt(req.body.punctuality) +
+                parseInt(req.body.confidentialityOfInfo) +
+                parseInt(req.body.trustworthiness) +
+                parseInt(req.body.teamSpirit) +
+                parseInt(req.body.relationshipWithColleagues) +
+                parseInt(req.body.decisionMaking) +
+                parseInt(req.body.computerskills);
+
 
               console.log(sum);
               // console.log(empEvaSum);
@@ -1066,7 +1083,23 @@ module.exports = function (app) {
                   });
 
                 // const sum = parseInt(req.body.sum);
-                const sum = req.body.communicationSkill + req.body.interpersonalSkill + req.body.abilityToPlanTheWork + req.body.problemSolving + req.body.adaptability + req.body.willingnessToShoulderAdditional + req.body.commitmentToDoAPerfectJob + req.body.habitsAndManners + req.body.presentation + req.body.punctuality + req.body.confidentialityOfInfo + req.body.trustworthiness + req.body.teamSpirit + req.body.relationshipWithColleagues + req.body.decisionMaking + req.body.computerskills;
+                const sum =
+                  parseInt(req.body.communicationSkill) +
+                  parseInt(req.body.interpersonalSkill) +
+                  parseInt(req.body.abilityToPlanTheWork) +
+                  parseInt(req.body.problemSolving) +
+                  parseInt(req.body.adaptability) +
+                  parseInt(req.body.willingnessToShoulderAdditional) +
+                  parseInt(req.body.commitmentToDoAPerfectJob) +
+                  parseInt(req.body.habitsAndManners) +
+                  parseInt(req.body.presentation) +
+                  parseInt(req.body.punctuality) +
+                  parseInt(req.body.confidentialityOfInfo) +
+                  parseInt(req.body.trustworthiness) +
+                  parseInt(req.body.teamSpirit) +
+                  parseInt(req.body.relationshipWithColleagues) +
+                  parseInt(req.body.decisionMaking) +
+                  parseInt(req.body.computerskills);
 
                 console.log(sum);
                 const lastSum = await L2Appraisal.findOne({
@@ -1221,7 +1254,24 @@ module.exports = function (app) {
                   });
 
                 // const sum = parseInt(req.body.sum);
-                const sum = req.body.communicationSkill + req.body.interpersonalSkill + req.body.abilityToPlanTheWork + req.body.problemSolving + req.body.adaptability + req.body.willingnessToShoulderAdditional + req.body.commitmentToDoAPerfectJob + req.body.habitsAndManners + req.body.presentation + req.body.punctuality + req.body.confidentialityOfInfo + req.body.trustworthiness + req.body.teamSpirit + req.body.relationshipWithColleagues + req.body.decisionMaking + req.body.computerskills;
+                const sum =
+                  parseInt(req.body.communicationSkill) +
+                  parseInt(req.body.interpersonalSkill) +
+                  parseInt(req.body.abilityToPlanTheWork) +
+                  parseInt(req.body.problemSolving) +
+                  parseInt(req.body.adaptability) +
+                  parseInt(req.body.willingnessToShoulderAdditional) +
+                  parseInt(req.body.commitmentToDoAPerfectJob) +
+                  parseInt(req.body.habitsAndManners) +
+                  parseInt(req.body.presentation) +
+                  parseInt(req.body.punctuality) +
+                  parseInt(req.body.confidentialityOfInfo) +
+                  parseInt(req.body.trustworthiness) +
+                  parseInt(req.body.teamSpirit) +
+                  parseInt(req.body.relationshipWithColleagues) +
+                  parseInt(req.body.decisionMaking) +
+                  parseInt(req.body.computerskills);
+
 
                 console.log("sum::::", sum);
                 const lastSum = await L3Appraisal.findOne({
@@ -1355,7 +1405,26 @@ module.exports = function (app) {
 
                   await Manager.update(updateData, { where: { appraisalId: req.body.appraisalId } });
 
-                  const sum = req.body.FSQoW1 + req.body.FSQoW2 + req.body.FSQoW3 + req.body.FSWH1 + req.body.FSWH2 + req.body.FSWH3 + req.body.FSWH4 + req.body.FSJK1 + req.body.FSJK2 + req.body.FSJK3 + req.body.ISIR1 + req.body.ISIR2 + req.body.ISIR3 + req.body.ISIR4 + req.body.ISIR5 + req.body.LSL1 + req.body.LSL2 + req.body.LSL3;
+                  const sum =
+                    parseInt(req.body.FSQoW1) +
+                    parseInt(req.body.FSQoW2) +
+                    parseInt(req.body.FSQoW3) +
+                    parseInt(req.body.FSWH1) +
+                    parseInt(req.body.FSWH2) +
+                    parseInt(req.body.FSWH3) +
+                    parseInt(req.body.FSWH4) +
+                    parseInt(req.body.FSJK1) +
+                    parseInt(req.body.FSJK2) +
+                    parseInt(req.body.FSJK3) +
+                    parseInt(req.body.ISIR1) +
+                    parseInt(req.body.ISIR2) +
+                    parseInt(req.body.ISIR3) +
+                    parseInt(req.body.ISIR4) +
+                    parseInt(req.body.ISIR5) +
+                    parseInt(req.body.LSL1) +
+                    parseInt(req.body.LSL2) +
+                    parseInt(req.body.LSL3);
+
 
                   const lastLevel = await Manager.findOne({
                     where: { appraisalId: req.body.appraisalId },
@@ -1467,9 +1536,57 @@ module.exports = function (app) {
 
   });
 
+  // apiRoutes.post("/anAppraisalDetailsOfEmpEval", async (req, res) => {
+  //   try {
+  //     const details = await empAppraisal.findAll({ where: { appraisalId: req.body.appraisalId }, raw: true });
+  //     console.log("data", details);
+  //     res.json({ "data": details[0] }).status(200);
+  //   }
+  //   catch (err) {
+  //     res.status(400).json({ "message": err });
+  //   }
+  // });
+
   apiRoutes.post("/anAppraisalDetailsOfEmpEval", async (req, res) => {
     try {
+      const employeeId = parseInt(req.body.employeeId);
       const details = await empAppraisal.findAll({ where: { appraisalId: req.body.appraisalId }, raw: true });
+      const L2Manager = details[0].assignedL2Manager;
+      const L3Manager = details[0].assignedL3Manager;
+      const L4Manager = details[0].assignedL4Manager;
+      const L5Manager = details[0].assignedL5Manager;
+      switch (employeeId) {
+        case L2Manager:
+          details[0]["isL2Manager"] = true
+          details[0]["isL3Manager"] = false
+          details[0]["isL4Manager"] = false
+          details[0]["isL5Manager"] = false
+          break;
+        case L3Manager:
+          details[0]["isL2Manager"] = false
+          details[0]["isL3Manager"] = true
+          details[0]["isL4Manager"] = false
+          details[0]["isL5Manager"] = false
+          break;
+        case L4Manager:
+          details[0]["isL2Manager"] = false
+          details[0]["isL3Manager"] = false
+          details[0]["isL4Manager"] = true
+          details[0]["isL5Manager"] = false
+          break;
+        case L5Manager:
+          details[0]["isL2Manager"] = false
+          details[0]["isL3Manager"] = false
+          details[0]["isL4Manager"] = false
+          details[0]["isL5Manager"] = true
+          break;
+        default:
+          details[0]["isL2Manager"] = false
+          details[0]["isL3Manager"] = false
+          details[0]["isL4Manager"] = false
+          details[0]["isL5Manager"] = false
+          break;
+      }
       console.log("data", details);
       res.json({ "data": details[0] }).status(200);
     }
@@ -2219,22 +2336,22 @@ module.exports = function (app) {
           });
         // const sum = parseInt(req.body.sum);
         // const sum = parseIntreq.body.communicationSkill + req.body.interpersonalSkill + req.body.abilityToPlanTheWork + req.body.problemSolving + req.body.adaptability + req.body.willingnessToShoulderAdditional + req.body.commitmentToDoAPerfectJob + req.body.habitsAndManners + req.body.presentation + req.body.punctuality + req.body.confidentialityOfInfo + req.body.trustworthiness + req.body.teamSpirit + req.body.relationshipWithColleagues + req.body.decisionMaking + req.body.computerskills;
-        const sum = parseInt(req.body.communicationSkill) + 
-            parseInt(req.body.interpersonalSkill) + 
-            parseInt(req.body.abilityToPlanTheWork) + 
-            parseInt(req.body.problemSolving) + 
-            parseInt(req.body.adaptability) + 
-            parseInt(req.body.willingnessToShoulderAdditional) + 
-            parseInt(req.body.commitmentToDoAPerfectJob) + 
-            parseInt(req.body.habitsAndManners) + 
-            parseInt(req.body.presentation) + 
-            parseInt(req.body.punctuality) + 
-            parseInt(req.body.confidentialityOfInfo) + 
-            parseInt(req.body.trustworthiness) + 
-            parseInt(req.body.teamSpirit) + 
-            parseInt(req.body.relationshipWithColleagues) + 
-            parseInt(req.body.decisionMaking) + 
-            parseInt(req.body.computerskills);
+        const sum = parseInt(req.body.communicationSkill) +
+          parseInt(req.body.interpersonalSkill) +
+          parseInt(req.body.abilityToPlanTheWork) +
+          parseInt(req.body.problemSolving) +
+          parseInt(req.body.adaptability) +
+          parseInt(req.body.willingnessToShoulderAdditional) +
+          parseInt(req.body.commitmentToDoAPerfectJob) +
+          parseInt(req.body.habitsAndManners) +
+          parseInt(req.body.presentation) +
+          parseInt(req.body.punctuality) +
+          parseInt(req.body.confidentialityOfInfo) +
+          parseInt(req.body.trustworthiness) +
+          parseInt(req.body.teamSpirit) +
+          parseInt(req.body.relationshipWithColleagues) +
+          parseInt(req.body.decisionMaking) +
+          parseInt(req.body.computerskills);
 
         console.log(sum);
 
@@ -3451,6 +3568,7 @@ module.exports = function (app) {
     }
   });
 
+
   apiRoutes.post('/empmangStore', async (req, res) => {
     try {
       console.log("req.body", req.body);
@@ -3554,7 +3672,7 @@ module.exports = function (app) {
     }
   });
 
-  apiRoutes.post('/empMang', async (req, res) => { //   Replacement for empmangStore and empmangUpdate
+  apiRoutes.post('/OldempMang', async (req, res) => { //   Replacement for empmangStore and empmangUpdate
     try {
       console.log("req.body", req.body);
       console.log("entries[0].employee::::::::", req.body.entries);
@@ -3610,162 +3728,240 @@ module.exports = function (app) {
     }
   });
 
-  apiRoutes.post('/employeeForm',async(req,res)=>{
-    try{
+  apiRoutes.post('/employeeForm', async (req, res) => {
+    try {
       const traits = [
-      {
-        factors: 'Communication Skills',
-        excellent: 5,
-        veryGood: 4,
-        good: 3,
-        average: 2,
-        formControlName: 'communicationSkill',
-        formControlRemarks: 'communicationSkillRemarks',
-      },
-      {
-        factors: 'Interpersonal Skills',
-        excellent: 5,
-        veryGood: 4,
-        good: 3,
-        average: 2,
-        formControlName: 'interpersonalSkill',
-        formControlRemarks: 'interpersonalSkillRemarks',
-      },
-      {
-        factors: 'Ability To Plan The Work',
-        excellent: 5,
-        veryGood: 4,
-        good: 3,
-        average: 2,
-        formControlName: 'abilityToPlanTheWork',
-        formControlRemarks: 'abilityToPlanTheWorkRemarks',
-      },
-      {
-        factors: 'Problem Solving',
-        excellent: 5,
-        veryGood: 4,
-        good: 3,
-        average: 2,
-        formControlName: 'problemSolving',
-        formControlRemarks: 'problemSolvingRemarks',
-      },
-      {
-        factors: 'Adaptability/Flexibility',
-        excellent: 5,
-        veryGood: 4,
-        good: 3,
-        average: 2,
-        formControlName: 'adaptability',
-        formControlRemarks: 'adaptabilityRemarks',
-      },
-      {
-        factors: 'Willingness to Shoulder Additional Responsibilities',
-        excellent: 5,
-        veryGood: 4,
-        good: 3,
-        average: 2,
-        formControlName: 'willingnessToShoulderAdditional',
-        formControlRemarks: 'willingnessToShoulderAdditionalRemarks',
-      },
-      {
-        factors: 'Commitment to do a Perfect Job',
-        excellent: 5,
-        veryGood: 4,
-        good: 3,
-        average: 2,
-        formControlName: 'commitmentToDoAPerfectJob',
-        formControlRemarks: 'commitmentToDoAPerfectJobRemarks',
-      },
-      {
-        factors: 'Habits and Manners',
-        excellent: 5,
-        veryGood: 4,
-        good: 3,
-        average: 2,
-        formControlName: 'habitsAndManners',
-        formControlRemarks: 'habitsAndMannersRemarks',
-      },
-      {
-        factors: 'Presentation/Dress',
-        excellent: 5,
-        veryGood: 4,
-        good: 3,
-        average: 2,
-        formControlName: 'presentation',
-        formControlRemarks: 'presentationRemarks',
-      },
-      {
-        factors: 'Punctuality',
-        excellent: 5,
-        veryGood: 4,
-        good: 3,
-        average: 2,
-        formControlName: 'punctuality',
-        formControlRemarks: 'punctualityRemarks',
-      },
-      {
-        factors: 'Confidentiality of information/official secret /documents',
-        excellent: 5,
-        veryGood: 4,
-        good: 3,
-        average: 2,
-        formControlName: 'confidentialityOfInfo',
-        formControlRemarks: 'confidentialityOfInfoRemarks',
-      },
-      {
-        factors: 'Trustworthiness/Reliability',
-        excellent: 5,
-        veryGood: 4,
-        good: 3,
-        average: 2,
-        formControlName: 'trustworthiness',
-        formControlRemarks: 'trustworthinessRemarks',
-      },
-      {
-        factors: 'Team spirit/Team work',
-        excellent: 5,
-        veryGood: 4,
-        good: 3,
-        average: 2,
-        formControlName: 'teamSpirit',
-        formControlRemarks: 'teamSpiritRemarks',
-      },
-      {
-        factors: 'Relationship with colleagues',
-        excellent: 5,
-        veryGood: 4,
-        good: 3,
-        average: 2,
-        formControlName: 'relationshipWithColleagues',
-        formControlRemarks: 'relationshipWithColleaguesRemarks',
-      },
-      {
-        factors: 'Decision making',
-        excellent: 5,
-        veryGood: 4,
-        good: 3,
-        average: 2,
-        formControlName: 'decisionMaking',
-        formControlRemarks: 'decisionMakingRemarks',
-      },
-      {
-        factors: 'Computer skills',
-        excellent: 5,
-        veryGood: 4,
-        good: 3,
-        average: 2,
-        formControlName: 'computerskills',
-        formControlRemarks: 'computerskillsRemarks',
-      },
-    ];
-    res.json({traits}).status(200);
-  }
-    catch(err){
-      res.status(400).json({err});
+        {
+          factors: 'Communication Skills',
+          excellent: 5,
+          veryGood: 4,
+          good: 3,
+          average: 2,
+          formControlName: 'communicationSkill',
+          formControlRemarks: 'communicationSkillRemarks',
+        },
+        {
+          factors: 'Interpersonal Skills',
+          excellent: 5,
+          veryGood: 4,
+          good: 3,
+          average: 2,
+          formControlName: 'interpersonalSkill',
+          formControlRemarks: 'interpersonalSkillRemarks',
+        },
+        {
+          factors: 'Ability To Plan The Work',
+          excellent: 5,
+          veryGood: 4,
+          good: 3,
+          average: 2,
+          formControlName: 'abilityToPlanTheWork',
+          formControlRemarks: 'abilityToPlanTheWorkRemarks',
+        },
+        {
+          factors: 'Problem Solving',
+          excellent: 5,
+          veryGood: 4,
+          good: 3,
+          average: 2,
+          formControlName: 'problemSolving',
+          formControlRemarks: 'problemSolvingRemarks',
+        },
+        {
+          factors: 'Adaptability/Flexibility',
+          excellent: 5,
+          veryGood: 4,
+          good: 3,
+          average: 2,
+          formControlName: 'adaptability',
+          formControlRemarks: 'adaptabilityRemarks',
+        },
+        {
+          factors: 'Willingness to Shoulder Additional Responsibilities',
+          excellent: 5,
+          veryGood: 4,
+          good: 3,
+          average: 2,
+          formControlName: 'willingnessToShoulderAdditional',
+          formControlRemarks: 'willingnessToShoulderAdditionalRemarks',
+        },
+        {
+          factors: 'Commitment to do a Perfect Job',
+          excellent: 5,
+          veryGood: 4,
+          good: 3,
+          average: 2,
+          formControlName: 'commitmentToDoAPerfectJob',
+          formControlRemarks: 'commitmentToDoAPerfectJobRemarks',
+        },
+        {
+          factors: 'Habits and Manners',
+          excellent: 5,
+          veryGood: 4,
+          good: 3,
+          average: 2,
+          formControlName: 'habitsAndManners',
+          formControlRemarks: 'habitsAndMannersRemarks',
+        },
+        {
+          factors: 'Presentation/Dress',
+          excellent: 5,
+          veryGood: 4,
+          good: 3,
+          average: 2,
+          formControlName: 'presentation',
+          formControlRemarks: 'presentationRemarks',
+        },
+        {
+          factors: 'Punctuality',
+          excellent: 5,
+          veryGood: 4,
+          good: 3,
+          average: 2,
+          formControlName: 'punctuality',
+          formControlRemarks: 'punctualityRemarks',
+        },
+        {
+          factors: 'Confidentiality of information/official secret /documents',
+          excellent: 5,
+          veryGood: 4,
+          good: 3,
+          average: 2,
+          formControlName: 'confidentialityOfInfo',
+          formControlRemarks: 'confidentialityOfInfoRemarks',
+        },
+        {
+          factors: 'Trustworthiness/Reliability',
+          excellent: 5,
+          veryGood: 4,
+          good: 3,
+          average: 2,
+          formControlName: 'trustworthiness',
+          formControlRemarks: 'trustworthinessRemarks',
+        },
+        {
+          factors: 'Team spirit/Team work',
+          excellent: 5,
+          veryGood: 4,
+          good: 3,
+          average: 2,
+          formControlName: 'teamSpirit',
+          formControlRemarks: 'teamSpiritRemarks',
+        },
+        {
+          factors: 'Relationship with colleagues',
+          excellent: 5,
+          veryGood: 4,
+          good: 3,
+          average: 2,
+          formControlName: 'relationshipWithColleagues',
+          formControlRemarks: 'relationshipWithColleaguesRemarks',
+        },
+        {
+          factors: 'Decision making',
+          excellent: 5,
+          veryGood: 4,
+          good: 3,
+          average: 2,
+          formControlName: 'decisionMaking',
+          formControlRemarks: 'decisionMakingRemarks',
+        },
+        {
+          factors: 'Computer skills',
+          excellent: 5,
+          veryGood: 4,
+          good: 3,
+          average: 2,
+          formControlName: 'computerskills',
+          formControlRemarks: 'computerskillsRemarks',
+        },
+      ];
+      res.json({ traits }).status(200);
+    }
+    catch (err) {
+      res.status(400).json({ err });
     }
   });
 
-
+  apiRoutes.post('/empMang', async (req, res) => {
+    try {
+      if (req.body.entries && req.body.entries.length > 0) {
+        const entries = req.body.entries;
+        const employeeId = entries[0].employee;
+        // Check if entries already exist for the employee
+        const existingEntry = await empMang.findOne({ where: { employeeId: employeeId }, raw: true });
+        if (existingEntry) {
+          // Update existing entries
+          for (let i = 0; i < entries.length; i++) {
+            await empMang.update({
+              L2ManagerId: entries[i].l2Manager,
+              L3ManagerId: entries[i].l3Manager,
+              L4ManagerId: entries[i].l4Manager,
+              L5ManagerId: entries[i].l5Manager,
+              hrId: entries[i].hr
+            }, { where: { employeeId: employeeId } }).then((data) => {
+              console.log("Entry updated for entries array object:::", i);
+            }).catch((err) => {
+              console.log(err);
+              res.status(400).json({ "message": err });
+            })
+          }
+          const managers = await empMang.findOne({
+            where: { employeeId: employeeId }, raw: true
+          });
+          console.log("managers::::", managers)
+          const L2Manager = managers.L2ManagerId;
+          const L3Manager = managers.L3ManagerId;
+          const L4Manager = managers.L4ManagerId;
+          const L5Manager = managers.L5ManagerId;
+          const hr = managers.hrId;
+          console.log("L2manager::::::", L2Manager);
+          console.log("L3manager::::::", L3Manager);
+          console.log("L4manager::::::", L4Manager);
+          console.log("L5manager::::::", L5Manager);
+          console.log("hrId::::::", hr);
+          empAppraisal.update(
+            { assignedL2Manager: L2Manager, assignedL3Manager: L3Manager, assignedL4Manager: L4Manager, assignedL5Manager: L5Manager, hrId: hr },
+            { where: { employeeId: employeeId } }
+          ).then((data) => {
+            console.log("Entries updated in empAppraisal");
+          })
+          res.json({ "message": "Entries Updated Successfully" }).status(200);
+        } else {
+          // Store new entries
+          for (let i = 0; i < entries.length; i++) {
+            const emp = entries[i].employee;
+            const l2 = entries[i].l2Manager;
+            const l3 = entries[i].l3Manager;
+            const l4 = entries[i].l4Manager;
+            const l5 = entries[i].l5Manager;
+            const hr = entries[i].hr;
+            if (emp == l2 || emp == l3 || emp == l4 || emp == l5 || emp == hr) {
+              return res.status(400).json({ "message": "Employee and manager cannot be same" });
+            }
+            await empMang.create({
+              employeeId: emp,
+              L2ManagerId: l2,
+              L3ManagerId: l3,
+              L4ManagerId: l4,
+              L5ManagerId: l5,
+              hrId: hr
+            }).then((data) => {
+              console.log("Entry created for entries array object:::", i)
+              res.json({ "message": "Entries Created" }).status(200);
+            }).catch((err) => {
+              console.log(err);
+              res.status(400).json({ "message": err });
+            })
+          }
+        }
+      } else {
+        res.status(400).json({ "message": "No entries provided" });
+      }
+    } catch (e) {
+      res.status(400).json({ "message": e });
+    }
+  });
 
   apiRoutes.get("/", function (req, res) {
     res.send({ status: true, message: "Please enter the correct endpoint" });
