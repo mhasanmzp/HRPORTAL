@@ -3269,7 +3269,7 @@ module.exports = function (app) {
 
   // });
 
-  apiRoutes.post('/allDetailsOfAnAppraisal', async (req, res) => { //For HR to know progress of an appraisal
+  apiRoutes.post('/OldallDetailsOfAnAppraisal', async (req, res) => { //For HR to know progress of an appraisal
     try {
       console.log(req.body);
       const managerId = req.body.employeeId;//It can have manager id or hr id
@@ -3369,7 +3369,7 @@ module.exports = function (app) {
       }
       if (managerId == details.L3ManagerId) {
         if (managerId == topManager) {
-          result.push(empDetails, l2Details, l3Details, l5Details);
+          result.push(empDetails,l2Details, l3Details, l5Details);
         }
         else {
           result.push(empDetails, l2Details, l3Details)
@@ -3385,6 +3385,141 @@ module.exports = function (app) {
       }
       if (managerId == details.L5ManagerId || managerId == details.hrId) {
         result.push(empDetails, l2Details, l3Details, l4Details, l5Details)
+      }
+      // if(managerId == top)
+      // result.push(empDetails, l2Details, l3Details, l4Details, l5Details)
+      res.json({ "data": result }).status(200);
+    }
+    catch (e) {
+      console.log(e);
+      res.status(400).json({ "message": e });
+    }
+  });
+
+  apiRoutes.post('/allDetailsOfAnAppraisal', async (req, res) => { //For HR to know progress of an appraisal
+    try {
+      console.log(req.body);
+      const managerId = req.body.employeeId;//It can have manager id or hr id
+      const id = req.body.appraisalId;
+      let result = [];
+      let empDetails;
+      let l2Details;
+      let l3Details;
+      let l4Details;
+      let l5Details;
+      let employeeId;
+      await empAppraisal.findOne({ where: { appraisalId: id }, raw: true }).then((data) => {
+        if (data) {
+          employeeId = data.employeeId;
+        }
+      }).catch((err) => {
+        console.log(err);
+      });
+      console.log("employeeId:::::", employeeId);
+      let details;
+      await empMang.findOne({ where: { employeeId: employeeId }, raw: true, attributes: ['employeeId', 'L2ManagerId', 'L3ManagerId', 'L4ManagerId', 'L5ManagerId', 'hrId'] }).then((data) => {
+        console.log("data::::::", data)
+        details = data;
+        // res.send(data).status(200)
+        console.log(data);
+      }).catch((err) => {
+        console.log(err);
+
+      });
+
+      console.log("details::::", details);
+      await empAppraisal.findOne({ where: { appraisalId: id }, raw: true }).then((data) => {
+        if (data) {
+          empDetails = data;
+        }
+        else {
+          empDetails = null
+        }
+      }).catch((err) => {
+        console.log(err);
+      });
+      await L2Appraisal.findOne({ where: { appraisalId: id }, raw: true }).then((data) => {
+        if (data) {
+          l2Details = data;
+        }
+        else {
+          l2Details = null;
+        }
+      }).catch((err) => {
+        console.log(err);
+      })
+      await L3Appraisal.findOne({ where: { appraisalId: id }, raw: true }).then((data) => {
+        if (data) {
+          l3Details = data;
+        }
+        else {
+          l3Details = null;
+        }
+      })
+    
+      await L4Appraisal.findOne({ where: { appraisalId: id }, raw: true }).then((data) => {
+        if (data) {
+          l4Details = data;
+        }
+        else {
+          l4Details = null;
+        }
+      })
+      await Manager.findOne({ where: { appraisalId: id }, raw: true }).then((data) => {
+        if (data) {
+          l5Details = data;
+        }
+        else {
+          l5Details = null;
+        }
+      })
+      let topManager;
+      if (details.L5ManagerId != null) {
+        topManager = details.L5ManagerId;
+      } else if (details.L4ManagerId != null) {
+        topManager = details.L4ManagerId;
+      } else if (details.L3ManagerId != null) {
+        topManager = details.L3ManagerId;
+      } else if (details.L2ManagerId != null) {
+        topManager = details.L2ManagerId;
+      } else {
+        // All managers are null
+        topManager = null;
+      }
+      console.log("topmanager:::", topManager);
+      if (managerId == details.L2ManagerId) {
+        if (managerId == topManager) {
+          let L2Details = {...empDetails, ...l2Details, ...l5Details }
+          result.push(L2Details);
+        }
+        else {
+          let L2Details = {...empDetails, ...l2Details}
+          result.push(L2Details)
+        }
+      }
+      if (managerId == details.L3ManagerId) {
+        if (managerId == topManager) {
+          let L3Details = {...empDetails, ...l2Details, ...l5Details}
+          result.push(L3Details);
+        }
+        else {
+          let L3Details = {...empDetails, ...l2Details, ...l3Details }
+          result.push(L3Details)
+        }
+      }
+      if (managerId == details.L4ManagerId) {
+        if (managerId == topManager) {
+          let L4Details = { ...empDetails, ...l2Details, ...l3Details, ...l4Details, ...l5Details }
+          result.push(L4Details)
+        }
+        else {
+          let L4Details = {...empDetails, ...l2Details , ...l3Details , ...l4Details}
+          result.push(L4Details)
+        }
+      }
+      if (managerId == details.L5ManagerId || managerId == details.hrId) {
+        let L5Details = {...empDetails, ...l2Details , ...l3Details , ...l4Details, ...l5Details}
+        result.push(L5Details)
       }
       // if(managerId == top)
       // result.push(empDetails, l2Details, l3Details, l4Details, l5Details)
@@ -3567,7 +3702,6 @@ module.exports = function (app) {
       res.status(400).json({ "message": err });
     }
   });
-
 
   apiRoutes.post('/empmangStore', async (req, res) => {
     try {
@@ -3929,7 +4063,6 @@ module.exports = function (app) {
           res.json({ "message": "Entries Updated Successfully" }).status(200);
         } else {
           // Store new entries
-          for (let i = 0; i < entries.length; i++) {
             const emp = entries[i].employee;
             const l2 = entries[i].l2Manager;
             const l3 = entries[i].l3Manager;
@@ -3953,7 +4086,7 @@ module.exports = function (app) {
               console.log(err);
               res.status(400).json({ "message": err });
             })
-          }
+          
         }
       } else {
         res.status(400).json({ "message": "No entries provided" });
