@@ -3511,12 +3511,15 @@ module.exports = function (app) {
         if (managerId == topManager) {
           let L4Details = { ...empDetails, ...l2Details, ...l3Details, ...l4Details, ...l5Details }
           result.push(L4Details)
+          console.log("L4Details :::::::::::::", l4Details )
         }
         else {
           let L4Details = {...empDetails, ...l2Details , ...l3Details , ...l4Details}
           result.push(L4Details)
         }
+        console.log("L4Details :::::::::::::", l4Details )
       }
+      
       if (managerId == details.L5ManagerId || managerId == details.hrId) {
         let L5Details = {...empDetails, ...l2Details , ...l3Details , ...l4Details, ...l5Details}
         result.push(L5Details)
@@ -4017,13 +4020,18 @@ module.exports = function (app) {
     }
   });
 
-  apiRoutes.post('/empMang', async (req, res) => {
+  apiRoutes.post('/empMang', async (req, res) => { // Sending Flag 1 if Appraisal is already In Progress.
     try {
       if (req.body.entries && req.body.entries.length > 0) {
         const entries = req.body.entries;
         const employeeId = entries[0].employee;
+  
         // Check if entries already exist for the employee
         const existingEntry = await empMang.findOne({ where: { employeeId: employeeId }, raw: true });
+        
+        // Check if appraisal process exists with a status other than "initiated"
+        const appraisalExists = await empAppraisal.findOne({ where: { employeeId: employeeId, status: { [Op.not]: 'initiated' } } });
+  
         if (existingEntry) {
           // Update existing entries
           for (let i = 0; i < entries.length; i++) {
@@ -4038,55 +4046,42 @@ module.exports = function (app) {
             }).catch((err) => {
               console.log(err);
               res.status(400).json({ "message": err });
-            })
+            });
           }
-          const managers = await empMang.findOne({
-            where: { employeeId: employeeId }, raw: true
-          });
-          console.log("managers::::", managers)
-          const L2Manager = managers.L2ManagerId;
-          const L3Manager = managers.L3ManagerId;
-          const L4Manager = managers.L4ManagerId;
-          const L5Manager = managers.L5ManagerId;
-          const hr = managers.hrId;
-          console.log("L2manager::::::", L2Manager);
-          console.log("L3manager::::::", L3Manager);
-          console.log("L4manager::::::", L4Manager);
-          console.log("L5manager::::::", L5Manager);
-          console.log("hrId::::::", hr);
-          empAppraisal.update(
-            { assignedL2Manager: L2Manager, assignedL3Manager: L3Manager, assignedL4Manager: L4Manager, assignedL5Manager: L5Manager, hrId: hr },
-            { where: { employeeId: employeeId } }
-          ).then((data) => {
-            console.log("Entries updated in empAppraisal");
-          })
+  
+          if (appraisalExists) {
+            // Send additional flag and message
+            return res.status(400).json({ "flag": 1, "message": "Can't Update Managers: Appraisal Already Processed" });
+          }
+  
           res.json({ "message": "Entries Updated Successfully" }).status(200);
         } else {
           // Store new entries
-            const emp = entries[i].employee;
-            const l2 = entries[i].l2Manager;
-            const l3 = entries[i].l3Manager;
-            const l4 = entries[i].l4Manager;
-            const l5 = entries[i].l5Manager;
-            const hr = entries[i].hr;
-            if (emp == l2 || emp == l3 || emp == l4 || emp == l5 || emp == hr) {
-              return res.status(400).json({ "message": "Employee and manager cannot be same" });
-            }
-            await empMang.create({
-              employeeId: emp,
-              L2ManagerId: l2,
-              L3ManagerId: l3,
-              L4ManagerId: l4,
-              L5ManagerId: l5,
-              hrId: hr
-            }).then((data) => {
-              console.log("Entry created for entries array object:::", i)
-              res.json({ "message": "Entries Created" }).status(200);
-            }).catch((err) => {
-              console.log(err);
-              res.status(400).json({ "message": err });
-            })
+          const emp = entries[i].employee;
+          const l2 = entries[i].l2Manager;
+          const l3 = entries[i].l3Manager;
+          const l4 = entries[i].l4Manager;
+          const l5 = entries[i].l5Manager;
+          const hr = entries[i].hr;
           
+          if (emp == l2 || emp == l3 || emp == l4 || emp == l5 || emp == hr) {
+            return res.status(400).json({ "message": "Employee and manager cannot be same" });
+          }
+  
+          await empMang.create({
+            employeeId: emp,
+            L2ManagerId: l2,
+            L3ManagerId: l3,
+            L4ManagerId: l4,
+            L5ManagerId: l5,
+            hrId: hr
+          }).then((data) => {
+            console.log("Entry created for entries array object:::", i)
+            res.json({ "message": "Entries Created" }).status(200);
+          }).catch((err) => {
+            console.log(err);
+            res.status(400).json({ "message": err });
+          });
         }
       } else {
         res.status(400).json({ "message": "No entries provided" });
@@ -4095,6 +4090,7 @@ module.exports = function (app) {
       res.status(400).json({ "message": e });
     }
   });
+  
 
   apiRoutes.get("/", function (req, res) {
     res.send({ status: true, message: "Please enter the correct endpoint" });

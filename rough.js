@@ -1,161 +1,91 @@
-// [
-//   "data": {
-      
-//           "appraisalId": 986164,
-//           "employeeId": 383,
-//           "createdAt": "2024-03-18T15:02:00.000Z",
-//           "communicationSkill": 5,
-//           "communicationSkillRemarks": "p",
-//           "interpersonalSkill": 5,
-//           "interpersonalSkillRemarks": "o",
-//           "abilityToPlanTheWork": 5,
-//           "abilityToPlanTheWorkRemarks": "n",
-//           "problemSolving": 5,
-//           "problemSolvingRemarks": "m",
-//           "adaptability": 5,
-//           "adaptabilityRemarks": "l",
-//           "willingnessToShoulderAdditional": 5,
-//           "willingnessToShoulderAdditionalRemarks": "k",
-//           "commitmentToDoAPerfectJob": 5,
-//           "commitmentToDoAPerfectJobRemarks": "j",
-//           "habitsAndManners": 5,
-//           "habitsAndMannersRemarks": "i",
-//           "presentation": 5,
-//           "presentationRemarks": "h",
-//           "punctuality": 5,
-//           "punctualityRemarks": "g",
-//           "confidentialityOfInfo": 5,
-//           "confidentialityOfInfoRemarks": "j",
-//           "trustworthiness": 5,
-//           "trustworthinessRemarks": "e",
-//           "teamSpirit": 5,
-//           "teamSpiritRemarks": "d",
-//           "relationshipWithColleagues": 5,
-//           "relationshipWithColleaguesRemarks": "c",
-//           "decisionMaking": 5,
-//           "decisionMakingRemarks": "b",
-//           "computerskills": 5,
-//           "computerskillsRemarks": "a",
-//           "status": "Forwarded to Level-3- Manager",
-//           "employeeOverallPercentage": 100,
-//           "employeeOverallRating": "Excellent",
-//           "employeeTotalScore": 80,
-//           "isEditedByEmp": 1,
-//           "assignedL2Manager": 141,
-//           "assignedL3Manager": 344,
-//           "assignedL4Manager": 254,
-//           "assignedL5Manager": 108,
-//           "hrId": 130
-//           "appraisalId": 986164,
-//           "L2ManagerId": 141,
-//           "createdAt": null,
-//           "L2communicationSkill": 5,
-//           "L2communicationSkillRemarks": "p",
-//           "L2interpersonalSkill": 4,
-//           "L2interpersonalSkillRemarks": "o",
-//           "L2abilityToPlanTheWork": 3,
-//           "L2abilityToPlanTheWorkRemarks": "n",
-//           "L2problemSolving": 2,
-//           "L2problemSolvingRemarks": "m",
-//           "L2adaptability": 5,
-//           "L2adaptabilityRemarks": "l",
-//           "L2willingnessToShoulderAdditional": 4,
-//           "L2willingnessToShoulderAdditionalRemarks": "k",
-//           "L2commitmentToDoAPerfectJob": 3,
-//           "L2commitmentToDoAPerfectJobRemarks": "j",
-//           "L2habitsAndManners": 2,
-//           "L2habitsAndMannersRemarks": "i",
-//           "L2presentation": 5,
-//           "L2presentationRemarks": "h",
-//           "L2punctuality": 4,
-//           "L2punctualityRemarks": "g",
-//           "L2confidentialityOfInfo": 3,
-//           "L2confidentialityOfInfoRemarks": "f",
-//           "L2trustworthiness": 2,
-//           "L2trustworthinessRemarks": "e",
-//           "L2teamSpirit": 5,
-//           "L2teamSpiritRemarks": "d",
-//           "L2relationshipWithColleagues": 4,
-//           "L2relationshipWithColleaguesRemarks": "c",
-//           "L2decisionMaking": 3,
-//           "L2decisionMakingRemarks": "b",
-//           "L2computerskills": 2,
-//           "L2computerskillsRemarks": "a",
-//           "L2_ManagersOverallPercentage": null,
-//           "L2_ManagersOverallRating": null,
-//           "L2_ManagersTotalScore": null,
-//           "isEditedByL2Manager": 1
-//           "appraisalId": 986164,
-//           "L3ManagerId": 134,
-//           "createdAt": null,
-//           "L3communicationSkill": null,
-//           "L3communicationSkillRemarks": null,
-//           "L3interpersonalSkill": null,
-//           "L3interpersonalSkillRemarks": null,
-//           "L3abilityToPlanTheWork": null,
-//           "L3abilityToPlanTheWorkRemarks": null,
-//           "L3problemSolving": null,
-//           "L3problemSolvingRemarks": null,
-//           "L3adaptability": null,
-//           "L3adaptabilityRemarks": null,
-//           "L3willingnessToShoulderAdditional": null,
-//           "L3willingnessToShoulderAdditionalRemarks": null,
-//           "L3commitmentToDoAPerfectJob": null,
-//           "L3commitmentToDoAPerfectJobRemarks": null,
-//           "L3habitsAndManners": null,
-//           "L3habitsAndMannersRemarks": null,
-//           "L3presentation": null,
-//           "L3presentationRemarks": null,
-//           "L3punctuality": null,
-//           "L3punctualityRemarks": null,
-//           "L3confidentialityOfInfo": null,
-//           "L3confidentialityOfInfoRemarks": null,
-//           "L3trustworthiness": null,
-//           "L3trustworthinessRemarks": null,
-//           "L3teamSpirit": null,
-//           "L3teamSpiritRemarks": null,
-//           "L3relationshipWithColleagues": null,
-//           "L3relationshipWithColleaguesRemarks": null,
-//           "L3decisionMaking": null,
-//           "L3decisionMakingRemarks": null,
-//           "L3computerskills": null,
-//           "L3computerskillsRemarks": null,
-//           "L3_ManagersOverallPercentage": null,
-//           "L3_ManagersOverallRating": null,
-//           "L3_ManagersTotalScore": null,
-//           "isEditedByL3Manager": 0
-//          "l4Details": null,
-//           "appraisalId": 986164,
-//           "ManagerId": null,
-//           "createdAt": null,
-//           "FSQoW_1": null,
-//           "FSQoW_2": null,
-//           "FSQoW_3": null,
-//           "FSWH_1": null,
-//           "FSWH_2": null,
-//           "FSWH_3": null,
-//           "FSWH_4": null,
-//           "FSJK_1": null,
-//           "FSJK_2": null,
-//           "FSJK_3": null,
-//           "FSRemarks": null,
-//           "ISIR_1": null,
-//           "ISIR_2": null,
-//           "ISIR_3": null,
-//           "ISIR_4": null,
-//           "ISIR_5": null,
-//           "ISIRRemarks": null,
-//           "LSL_1": null,
-//           "LSL_2": null,
-//           "LSL_3": null,
-//           "LSLRemarks": null,
-//           "lastLevelMaxMarks": null,
-//           "lastLevelScoredMarks": null,
-//           "managersOverallPercentage": null,
-//           "managersOverallRating": null,
-//           "managersTotalScore": null,
-//           "isEditedByManager": 0
-      
+apiRoutes.post('/MyempMang', async (req, res) => { // Sending Flag 1 if Appraisal is already Forwarded.
+    try {
+      if (req.body.entries && req.body.entries.length > 0) {
+        const entries = req.body.entries;
+        const employeeId = entries[0].employee;
   
-// }
-// ]
+        // Check if entries already exist for the employee
+        const existingEntry = await empMang.findOne({ where: { employeeId: employeeId }, raw: true });
+        
+        // Check if appraisal process exists with a status other than "initiated"
+        const appraisalExists = await empAppraisal.findOne({ where: { employeeId: employeeId, status: { [Op.not]: 'initiated' } } });
+
+        if (appraisalExists && appraisalExists.status == "initiated") {
+            
+                
+                const { l2Manager, l3Manager, l4Manager, l5Manager, hr } = req.body;
+
+                // Prepare update object with only provided managers
+                const updatedManagers = {};
+                if (l2Manager !== undefined) updatedManagers.L2ManagerId = l2Manager;
+                if (l3Manager !== undefined) updatedManagers.L3ManagerId = l3Manager;
+                if (l4Manager !== undefined) updatedManagers.L4ManagerId = l4Manager;
+                if (l5Manager !== undefined) updatedManagers.L5ManagerId = l5Manager;
+                if (hr !== undefined) updatedManagers.hrId = hr;
+
+                // Update only the provided managers without affecting the absent managers
+                await empMang.update(updatedManagers, { where: { employeeId: employeeId } });
+                res.status(200).json({"message": "Updated Succesfully"})
+            }
+            console.log("updatedManagers: " + updatedManagers)
+        }
+
+        else if (existingEntry) {
+            // Update existing entries
+            for (let i = 0; i < entries.length; i++) {
+              await empMang.update({
+                L2ManagerId: entries[i].l2Manager,
+                L3ManagerId: entries[i].l3Manager,
+                L4ManagerId: entries[i].l4Manager,
+                L5ManagerId: entries[i].l5Manager,
+                hrId: entries[i].hr
+              }, { where: { employeeId: employeeId } }).then((data) => {
+                console.log("Entry updated for entries array object:::", i);
+              }).catch((err) => {
+                console.log(err);
+                res.status(400).json({ "message": err });
+              });
+            }
+
+            else{
+            // Send additional flag and message
+            return res.status(400).json({ "flag": 1, "message": "Can't Update Managers: Appraisal Already Processed" });
+          }
+  
+          res.json({ "message": "Entries Updated Successfully" }).status(200);
+        } else {
+          // Store new entries
+          const emp = entries[i].employee;
+          const l2 = entries[i].l2Manager;
+          const l3 = entries[i].l3Manager;
+          const l4 = entries[i].l4Manager;
+          const l5 = entries[i].l5Manager;
+          const hr = entries[i].hr;
+          
+          if (emp == l2 || emp == l3 || emp == l4 || emp == l5 || emp == hr) {
+            return res.status(400).json({ "message": "Employee and manager cannot be same" });
+          }
+  
+          await empMang.create({
+            employeeId: emp,
+            L2ManagerId: l2,
+            L3ManagerId: l3,
+            L4ManagerId: l4,
+            L5ManagerId: l5,
+            hrId: hr
+          }).then((data) => {
+            console.log("Entry created for entries array object:::", i)
+            res.json({ "message": "Entries Created" }).status(200);
+          }).catch((err) => {
+            console.log(err);
+            res.status(400).json({ "message": err });
+          });
+        }
+      } else {
+        res.status(400).json({ "message": "No entries provided" });
+      }
+    } catch (e) {
+      res.status(400).json({ "message": e });
+    }
+  });
+  
