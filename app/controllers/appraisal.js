@@ -4029,9 +4029,13 @@ module.exports = function (app) {
         // Check if entries already exist for the employee
         const existingEntry = await empMang.findOne({ where: { employeeId: employeeId }, raw: true });
         
-        // Check if appraisal process exists with a status other than "initiated"
-        const appraisalExists = await empAppraisal.findOne({ where: { employeeId: employeeId, status: { [Op.not]: 'initiated' } } });
-  
+        // Check if appraisal process exists with a status other than "Initiated"
+        const latestAppraisal = await empAppraisal.findOne({
+          where: { employeeId: employeeId },
+          order: [['createdAt', 'DESC']], // Fetching the latest appraisal based on createdAt date and time
+          limit: 1
+        });
+
         if (existingEntry) {
           // Update existing entries
           for (let i = 0; i < entries.length; i++) {
@@ -4049,8 +4053,8 @@ module.exports = function (app) {
             });
           }
   
-          if (appraisalExists) {
-            // Send additional flag and message
+          if (latestAppraisal && latestAppraisal.status !== 'Initiated') {
+            // Send additional flag and message if appraisal exists and not initiated
             return res.status(400).json({ "flag": 1, "message": "Can't Update Managers: Appraisal Already Processed" });
           }
   
@@ -4090,7 +4094,6 @@ module.exports = function (app) {
       res.status(400).json({ "message": e });
     }
   });
-  
 
   apiRoutes.get("/", function (req, res) {
     res.send({ status: true, message: "Please enter the correct endpoint" });
