@@ -27,6 +27,7 @@ const { differenceInMonths, max, getYear } = require('date-fns');
 const { isNull, concat, entries } = require("lodash");
 const { map } = require("async");
 const { v4: uuidv4 } = require('uuid');
+const { log } = require("console");
 
 // // Generate a UUID
 // const myUUID = uuidv4();
@@ -2925,7 +2926,7 @@ module.exports = function (app) {
     try {
       const id = req.body.employeeId; // manager's id fetched from req.body
       console.log("id:::::", id);
-
+      console.log("Body:::::", req.body);
       const rawQuery = `
         SELECT
           CONCAT(E.firstname, CONCAT(" ",E.lastName)) AS name,
@@ -2993,6 +2994,7 @@ module.exports = function (app) {
   //     res.status(500).json({ error: "Internal Server Error" });
   //   }
   // });
+
 
   apiRoutes.post("/appraisalListHr", async (req, res) => {//For manager main screen to show appraisals alloted to him/her
     try {
