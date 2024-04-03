@@ -29,13 +29,6 @@ const { map } = require("async");
 const { v4: uuidv4 } = require('uuid');
 const { log } = require("console");
 
-// // Generate a UUID
-// const myUUID = uuidv4();
-
-// console.log(myUUID);
-
-
-
 module.exports = function (app) {
   let smtpAuth = {
     user: smtp.smtpuser,
@@ -804,7 +797,6 @@ module.exports = function (app) {
       const appraisalDetails = await empAppraisal.findOne({ where: { appraisalId: req.body.appraisalId }, raw: true, attributes: ['employeeId', 'isEditedByEmp'] });
       console.log(appraisalDetails);
       const empFlag = appraisalDetails.isEditedByEmp;
-      // const L2EmpFlag = appraisalDetails.isEditedByL2;
       let L2Flag;
       let L3Flag;
       let L4Flag;
@@ -830,7 +822,6 @@ module.exports = function (app) {
       } else if (empMangDetails.L2ManagerId !== null) {
         topManager = empMangDetails.L2ManagerId;
       } else {
-        // All managers are null
         topManager = null;
       }
 
@@ -1237,8 +1228,6 @@ module.exports = function (app) {
                 };
 
                 const updateCondition = {
-                  // Define the condition based on which records should be updated
-                  // For example, to update records with id = 1:
                   appraisalId: req.body.appraisalId,
                 };
 
@@ -1369,38 +1358,37 @@ module.exports = function (app) {
               } else if (L4Flag === 0) {
                 res.status(400).json({ "message": "Level 4 Evaluation is not done yet" });
               } else {
-                console.log("heressssssssssssssssssss");
-
                 let check = managerData.isEditedByManager;
                 console.log("check::::::", check);
 
                 if (check === 1) {
                   res.status(400).json({ "message": "Form already submitted by the manager not allowed to re-submit" });
                 } else {
+                  console.log("here::::::::::::");
                   const updateData = {
                     appraisalId: appraisalId,
                     ManagerId: id,
                     createdAt: date,
-                    FSQoW_1: req.body.FSQoW1,
-                    FSQoW_2: req.body.FSQoW2,
-                    FSQoW_3: req.body.FSQoW3,
-                    FSWH_1: req.body.FSWH1,
-                    FSWH_2: req.body.FSWH2,
-                    FSWH_3: req.body.FSWH3,
-                    FSWH_4: req.body.FSWH4,
-                    FSJK_1: req.body.FSJK1,
-                    FSJK_2: req.body.FSJK2,
-                    FSJK_3: req.body.FSJK3,
+                    FSQoW1: req.body.FSQoW1,
+                    FSQoW2: req.body.FSQoW2,
+                    FSQoW3: req.body.FSQoW3,
+                    FSWH1: req.body.FSWH1,
+                    FSWH2: req.body.FSWH2,
+                    FSWH3: req.body.FSWH3,
+                    FSWH4: req.body.FSWH4,
+                    FSJK1: req.body.FSJK1,
+                    FSJK2: req.body.FSJK2,
+                    FSJK3: req.body.FSJK3,
                     FSRemarks: req.body.FSRemarks,
-                    ISIR_1: req.body.ISIR1,
-                    ISIR_2: req.body.ISIR2,
-                    ISIR_3: req.body.ISIR3,
-                    ISIR_4: req.body.ISIR4,
-                    ISIR_5: req.body.ISIR5,
+                    ISIR1: req.body.ISIR1,
+                    ISIR2: req.body.ISIR2,
+                    ISIR3: req.body.ISIR3,
+                    ISIR4: req.body.ISIR4,
+                    ISIR5: req.body.ISIR5,
                     ISIRRemarks: req.body.ISIRRemarks,
-                    LSL_1: req.body.LSL1,
-                    LSL_2: req.body.LSL2,
-                    LSL_3: req.body.LSL3,
+                    LSL1: req.body.LSL1,
+                    LSL2: req.body.LSL2,
+                    LSL3: req.body.LSL3,
                     LSLRemarks: req.body.LSLRemarks,
                   }
 
@@ -1462,9 +1450,6 @@ module.exports = function (app) {
                   console.log("OverallRating::::::::::", overallRating);
                   const flag = req.body.flag;
                   if (flag == 1) {
-
-
-
                     await Manager.update(
                       { managersOverallRating: overallRating, isEditedByManager: true },
                       { where: { appraisalId: req.body.appraisalId } }
@@ -2317,11 +2302,10 @@ module.exports = function (app) {
           decisionMakingRemarks: req.body.decisionMakingRemarks,
           computerskills: req.body.computerskills,
           computerskillsRemarks: req.body.computerskillsRemarks
-          // Add more fields as needed
+          // Add more fields as needed further for more traits.
         };
         const updateCondition = {
-          // Define the condition based on which records should be updated
-          // For example, to update records with id = 1:
+
           appraisalId: req.body.appraisalId,
         };
         empAppraisal.update(updateData, {
@@ -2329,15 +2313,14 @@ module.exports = function (app) {
         })
           .then((data) => {
             console.log("Updated Successfully");
-            // res.send("Updated Successfully").status(200)
+    
           })
           .catch(error => {
             console.error('Error updating records:', error);
-            // res.send(error).status(400);
+            
           });
-        // const sum = parseInt(req.body.sum);
-        // const sum = parseIntreq.body.communicationSkill + req.body.interpersonalSkill + req.body.abilityToPlanTheWork + req.body.problemSolving + req.body.adaptability + req.body.willingnessToShoulderAdditional + req.body.commitmentToDoAPerfectJob + req.body.habitsAndManners + req.body.presentation + req.body.punctuality + req.body.confidentialityOfInfo + req.body.trustworthiness + req.body.teamSpirit + req.body.relationshipWithColleagues + req.body.decisionMaking + req.body.computerskills;
-        const sum = parseInt(req.body.communicationSkill) +
+      
+          const sum = parseInt(req.body.communicationSkill) +
           parseInt(req.body.interpersonalSkill) +
           parseInt(req.body.abilityToPlanTheWork) +
           parseInt(req.body.problemSolving) +
@@ -3036,8 +3019,7 @@ module.exports = function (app) {
   apiRoutes.post('/anEmpBasicDetails', async (req, res) => {
     try {
 
-
-      const id = req.body.empId;
+      const id = req.body.employeeId;
       const rawQuery = `SELECT CONCAT(E.firstname, CONCAT(" ",E.lastName)) AS name,E.employeeId,E.designation,E.officialEmail,D.name AS Department FROM employees AS E INNER JOIN departments AS D ON E.departmentId = D.id WHERE E.employeeId = ${id}`;
 
       sequelize.query(rawQuery, {
@@ -3523,7 +3505,8 @@ module.exports = function (app) {
       }
       
       if (managerId == details.L5ManagerId || managerId == details.hrId) {
-        let L5Details = {...empDetails, ...l2Details , ...l3Details , ...l4Details, ...l5Details}
+        let temp = {...empDetails, ...l2Details , ...l3Details , ...l4Details, ...l5Details}
+        let L5Details = [temp,l5Details]
         result.push(L5Details)
       }
       // if(managerId == top)

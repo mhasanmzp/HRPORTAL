@@ -15,64 +15,64 @@ module.exports = (sequelize, Sequelize) => {
         createdAt: {
             type: Sequelize.DATE
         },
-        FSQoW_1: {     //At level 2 FUNCTIONAL SKILLS Quality of Work Field-1-Accuracy, neatness and timeliness of work
+        FSQoW1: {     //At level 2 FUNCTIONAL SKILLS Quality of Work Field-1-Accuracy, neatness and timeliness of work
             type:Sequelize.INTEGER
         },
-        FSQoW_2: {
+        FSQoW2: {
             type:Sequelize.INTEGER
         },
-        FSQoW_3: {
+        FSQoW3: {
             type:Sequelize.INTEGER
         },
-        FSWH_1: {
+        FSWH1: {
             type:Sequelize.INTEGER
         },
-        FSWH_2: {
+        FSWH2: {
             type:Sequelize.INTEGER
         },
-        FSWH_3: {
+        FSWH3: {
             type:Sequelize.INTEGER
         },
-        FSWH_4: {
+        FSWH4: {
             type:Sequelize.INTEGER
         },
-        FSJK_1: {
+        FSJK1: {
             type:Sequelize.INTEGER
         },
-        FSJK_2: {
+        FSJK2: {
             type:Sequelize.INTEGER
         },
-        FSJK_3: {
+        FSJK3: {
             type:Sequelize.INTEGER
         },
         FSRemarks: {
             type:Sequelize.STRING(255)
         },
-        ISIR_1: {
+        ISIR1: {
             type:Sequelize.INTEGER
         },
-        ISIR_2: {
+        ISIR2: {
             type:Sequelize.INTEGER
         },
-        ISIR_3: {
+        ISIR3: {
             type:Sequelize.INTEGER
         },
-        ISIR_4: {
+        ISIR4: {
             type:Sequelize.INTEGER
         },
-        ISIR_5: {
+        ISIR5: {
             type:Sequelize.INTEGER
         },
         ISIRRemarks: {
             type:Sequelize.STRING(255)
         },
-        LSL_1:{
+        LSL1:{
             type:Sequelize.INTEGER
         },
-        LSL_2:{
+        LSL2:{
             type:Sequelize.INTEGER
         },
-        LSL_3:{
+        LSL3:{
             type:Sequelize.INTEGER
         },
         LSLRemarks:{
