@@ -27,7 +27,7 @@ const { differenceInMonths, max, getYear } = require('date-fns');
 const { isNull, concat, entries } = require("lodash");
 const { map } = require("async");
 const { v4: uuidv4 } = require('uuid');
-const { log } = require("console");
+const { log, Console } = require("console");
 
 module.exports = function (app) {
   let smtpAuth = {
@@ -2935,7 +2935,7 @@ module.exports = function (app) {
     }
   });
 
-  apiRoutes.post('/empmangStore', async (req, res) => {
+  apiRoutes.post('/oldempmangStore', async (req, res) => {
     try {
       console.log("req.body", req.body);
       console.log("entries[0].employee::::::::", req.body.entries);
@@ -2984,6 +2984,71 @@ module.exports = function (app) {
     }
 
   });
+  //new empmangStore is below
+  apiRoutes.post('/empmangStore', async (req, res) => {
+    try {
+        console.log("req.body", req.body);
+        const entries = req.body.entries;
+
+        // Function to check for duplicates in an array
+        function hasDuplicates(managerIds) {
+            const encountered = new Set();
+
+            for (const id of managerIds) {
+                if (encountered.has(id)) {
+                    return 1; // Found a duplicate
+                } else {
+                    encountered.add(id);
+                }
+            }
+
+            return 0; // No duplicates found
+        }
+
+        // Check for duplicate manager IDs
+        const entry = entries[0];
+        let managerIds = [entry.l2Manager, entry.l3Manager, entry.l4Manager, entry.l5Manager];
+        
+        // Remove null values from managerIds array
+        managerIds = managerIds.filter(id => id !== null);
+
+        console.log("managerIds:::", managerIds);
+        if (hasDuplicates(managerIds)) {
+            res.status(400).json({ "message": "Managers at different levels must not be the same" });
+            return;
+        }
+
+        // Check if employee is the same as any manager or HR
+        if (entry.employee === entry.l2Manager || entry.employee === entry.l3Manager || entry.employee === entry.l4Manager || entry.employee === entry.l5Manager || entry.employee === entry.hr) {
+            res.status(400).json({ "message": "Employee and manager cannot be the same" });
+            return;
+        }
+
+        // Check if entries already exist for the selected employee
+        const info = await empMang.findOne({ where: { employeeId: entries[0].employee }, raw: true });
+        if (info) {
+            res.status(400).json({ "message": "Entries already present for the selected employee" });
+            return;
+        }
+
+        // Create entries in the database
+        for (let i = 0; i < entries.length; i++) {
+            const entry = entries[i];
+            await empMang.create({
+                employeeId: entry.employee,
+                L2ManagerId: entry.l2Manager,
+                L3ManagerId: entry.l3Manager,
+                L4ManagerId: entry.l4Manager,
+                L5ManagerId: entry.l5Manager,
+                hrId: entry.hr
+            });
+        }
+
+        res.status(200).json({ "message": "Entries Created" });
+    } catch (e) {
+        res.status(400).json({ "message": e.message || "An error occurred" });
+    }
+});
 
   apiRoutes.post('/empmangUpdate', async (req, res) => {
 
@@ -3021,6 +3086,40 @@ module.exports = function (app) {
 
 
       console.log(" After ENTRIES::::", entries)
+
+
+      function hasDuplicates(managerIds) {
+        const encountered = new Set();
+
+        for (const id of managerIds) {
+            if (encountered.has(id)) {
+                return 1; // Found a duplicate
+            } else {
+                encountered.add(id);
+            }
+        }
+
+        return 0; // No duplicates found
+    }
+
+    // Check for duplicate manager IDs
+    const entry = entries[0];
+    let managerIds = [entry.l2Manager, entry.l3Manager, entry.l4Manager, entry.l5Manager];
+    
+    // Remove null values from managerIds array
+    managerIds = managerIds.filter(id => id !== null);
+
+    console.log("managerIds:::", managerIds);
+    if (hasDuplicates(managerIds)) {
+        res.status(400).json({ "message": "Managers at different levels must not be the same" });
+        return;
+    }
+    if (entry.employee === entry.l2Manager || entry.employee === entry.l3Manager || entry.employee === entry.l4Manager || entry.employee === entry.l5Manager || entry.employee === entry.hr) {
+      res.status(400).json({ "message": "Employee and manager cannot be the same" });
+      return;
+  }
+
+
       for (let i = 0; i < entries.length; i++) {
         await empMang.update({ employeeId: employeeId, L2ManagerId: entries[i].l2Manager, L3ManagerId: entries[i].l3Manager, L4ManagerId: entries[i].l4Manager, L5ManagerId: entries[i].l5Manager, hrId: entries[i].hr }, { where: { employeeId: employeeId } }).then((data) => {
           console.log("Entry updated for entries array object:::", i);
