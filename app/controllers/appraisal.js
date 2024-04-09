@@ -51,6 +51,9 @@ module.exports = function (app) {
   });
 
   apiRoutes.post("/hrResponse", async (req, res) => {
+    try{
+
+    
     console.log("req.body::::::", req.body);
     const flag = req.body.flag;
     if (flag == 1) {
@@ -61,10 +64,20 @@ module.exports = function (app) {
         console.log(err);
       })
     }
-    else {
-      res.json({ "message": "Appraisal has been rejected" });
+    else{
+      empAppraisal.update({ status: "Appraisal Rejected" }, { where: { appraisalId: req.body.appraisalId } }).then((data) => {
+        res.status(400).json({ "message": "Appraisal process has been rejected" });
+        console.log("Status updated successfully");
+      }).catch((err) => {
+        console.log(err);
+      })
     }
-  });
+  }
+  catch(e){
+    res.status(400).json(e);
+  }
+
+    });
 
   apiRoutes.post("/oldmanagersEvaluation", async (req, res) => {//old
     try {
@@ -1700,17 +1713,17 @@ module.exports = function (app) {
         console.log("hrId::::::", hr);
         let topManager;
 
-      if (L5Manager !== null) {
-        topManager = L5Manager;
-      } else if (L4Manager !== null) {
-        topManager = L4Manager;
-      } else if (L3Manager !== null) {
-        topManager = L3Manager;
-      } else if (L2Manager !== null) {
-        topManager = L2Manager;
-      } else {
-        topManager = null;
-      }
+        if (L5Manager !== null) {
+          topManager = L5Manager;
+        } else if (L4Manager !== null) {
+          topManager = L4Manager;
+        } else if (L3Manager !== null) {
+          topManager = L3Manager;
+        } else if (L2Manager !== null) {
+          topManager = L2Manager;
+        } else {
+          topManager = null;
+        }
         empAppraisal.update(
           { assignedL2Manager: L2Manager, assignedL3Manager: L3Manager, assignedL4Manager: L4Manager, assignedL5Manager: L5Manager, hrId: hr },
           { where: { employeeId: req.body.employeeId } }
@@ -1718,37 +1731,37 @@ module.exports = function (app) {
           console.log("Entries created in empAppraisal");
         })
 
-         // Send email to L2Manager
-      Employees.findOne({
-        attributes: ['officialEmail'],
-        where: { employeeId: L2Manager },
-        raw: true
-      }).then((l2ManagerDetails) => {
-        if (l2ManagerDetails) {
-          const l2ManagerEmail = l2ManagerDetails.officialEmail;
-          const htmlFilePath = path.join('Mails/mangAppMail.ejs');
-          const htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
-          let mailOptions = {
-            from: 'support@timesofpeople.com',
-            to: l2ManagerEmail,
-            subject: 'You Have Been Assigned as an Evaluator',
-            text: `Dear Manager,\n\nYou have been assigned as an evaluator for an employee. Please review the employee's evaluation.\n\nRegards,\Mckinsol Consulting Inc.`,
-            html: htmlContent,
-          };
+        // Send email to L2Manager
+        Employees.findOne({
+          attributes: ['officialEmail'],
+          where: { employeeId: L2Manager },
+          raw: true
+        }).then((l2ManagerDetails) => {
+          if (l2ManagerDetails) {
+            const l2ManagerEmail = l2ManagerDetails.officialEmail;
+            const htmlFilePath = path.join('Mails/mangAppMail.ejs');
+            const htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
+            let mailOptions = {
+              from: 'support@timesofpeople.com',
+              to: l2ManagerEmail,
+              subject: 'You Have Been Assigned as an Evaluator',
+              text: `Dear Manager,\n\nYou have been assigned as an evaluator for an employee. Please review the employee's evaluation.\n\nRegards,\Mckinsol Consulting Inc.`,
+              html: htmlContent,
+            };
 
-          console.log(l2ManagerEmail);
+            console.log(l2ManagerEmail);
 
-          transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-              console.log(error);
-            } else {
-              console.log('Email sent to ' + l2ManagerEmail);
-            }
-          });
-        }
-      }).catch((err) => {
-        console.log("Error finding L2 Manager details: ", err);
-      });
+            transporter.sendMail(mailOptions, function (error, info) {
+              if (error) {
+                console.log(error);
+              } else {
+                console.log('Email sent to ' + l2ManagerEmail);
+              }
+            });
+          }
+        }).catch((err) => {
+          console.log("Error finding L2 Manager details: ", err);
+        });
 
         //Creating a row in L2Appraisal Table ///////////
         await L2Appraisal.create({ appraisalId: req.body.appraisalId, L2ManagerId: L2Manager }).then((data) => {
@@ -1757,40 +1770,40 @@ module.exports = function (app) {
           console.log(err);
         });
 
-         // Send email to L3Manager
-      Employees.findOne({
-        attributes: ['officialEmail'],
-        where: { employeeId: L3Manager },
-        raw: true
-      }).then((l3ManagerDetails) => {
-        if (l3ManagerDetails) {
-          const l3ManagerEmail = l3ManagerDetails.officialEmail;
-          const htmlFilePath = path.join('Mails/mangAppMail.ejs');
-          const htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
-          let mailOptions = {
-            from: 'support@timesofpeople.com',
-            to: l3ManagerEmail,
-            subject: 'You Have Been Assigned as an Evaluator',
-            text: `Dear Manager,\n\nYou have been assigned as an evaluator for an employee. Please review the employee's evaluation.\n\nRegards,\Mckinsol Consulting Inc.`,
-            html: htmlContent,
-          };
+        // Send email to L3Manager
+        Employees.findOne({
+          attributes: ['officialEmail'],
+          where: { employeeId: L3Manager },
+          raw: true
+        }).then((l3ManagerDetails) => {
+          if (l3ManagerDetails) {
+            const l3ManagerEmail = l3ManagerDetails.officialEmail;
+            const htmlFilePath = path.join('Mails/mangAppMail.ejs');
+            const htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
+            let mailOptions = {
+              from: 'support@timesofpeople.com',
+              to: l3ManagerEmail,
+              subject: 'You Have Been Assigned as an Evaluator',
+              text: `Dear Manager,\n\nYou have been assigned as an evaluator for an employee. Please review the employee's evaluation.\n\nRegards,\Mckinsol Consulting Inc.`,
+              html: htmlContent,
+            };
 
-          console.log(l3ManagerEmail);
+            console.log(l3ManagerEmail);
 
-          transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-              console.log(error);
-            } else {
-              console.log('Email sent to ' + l3ManagerEmail);
-            }
-          });
-        }
-      }).catch((err) => {
-        console.log("Error finding L3 Manager details: ", err);
-      });
+            transporter.sendMail(mailOptions, function (error, info) {
+              if (error) {
+                console.log(error);
+              } else {
+                console.log('Email sent to ' + l3ManagerEmail);
+              }
+            });
+          }
+        }).catch((err) => {
+          console.log("Error finding L3 Manager details: ", err);
+        });
 
         ////Creating a row in L3Appraisal Table////////
-        if (!(isNull(L3Manager)) && !(L3Manager ===topManager)) {
+        if (!(isNull(L3Manager)) && !(L3Manager === topManager)) {
           await L3Appraisal.create({ appraisalId: req.body.appraisalId, L3ManagerId: L3Manager }).then((data) => {
             console.log("Enteries created successfully in L3Appraisal Table")
           }).catch((err) => {
@@ -1798,37 +1811,37 @@ module.exports = function (app) {
           });
         }
 
-         // Send email to L4Manager
-      Employees.findOne({
-        attributes: ['officialEmail'],
-        where: { employeeId: L4Manager },
-        raw: true
-      }).then((l4ManagerDetails) => {
-        if (l4ManagerDetails) {
-          const l4ManagerEmail = l4ManagerDetails.officialEmail;
-          const htmlFilePath = path.join('Mails/mangAppMail.ejs');
-          const htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
-          let mailOptions = {
-            from: 'support@timesofpeople.com',
-            to: l4ManagerEmail,
-            subject: 'You Have Been Assigned as an Evaluator',
-            text: `Dear Manager,\n\nYou have been assigned as an evaluator for an employee. Please review the employee's evaluation.\n\nRegards,\Mckinsol Consulting Inc.`,
-            html: htmlContent,
-          };
+        // Send email to L4Manager
+        Employees.findOne({
+          attributes: ['officialEmail'],
+          where: { employeeId: L4Manager },
+          raw: true
+        }).then((l4ManagerDetails) => {
+          if (l4ManagerDetails) {
+            const l4ManagerEmail = l4ManagerDetails.officialEmail;
+            const htmlFilePath = path.join('Mails/mangAppMail.ejs');
+            const htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
+            let mailOptions = {
+              from: 'support@timesofpeople.com',
+              to: l4ManagerEmail,
+              subject: 'You Have Been Assigned as an Evaluator',
+              text: `Dear Manager,\n\nYou have been assigned as an evaluator for an employee. Please review the employee's evaluation.\n\nRegards,\Mckinsol Consulting Inc.`,
+              html: htmlContent,
+            };
 
-          console.log(l4ManagerEmail);
+            console.log(l4ManagerEmail);
 
-          transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-              console.log(error);
-            } else {
-              console.log('Email sent to ' + l4ManagerEmail);
-            }
-          });
-        }
-      }).catch((err) => {
-        console.log("Error finding L4 Manager details: ", err);
-      });
+            transporter.sendMail(mailOptions, function (error, info) {
+              if (error) {
+                console.log(error);
+              } else {
+                console.log('Email sent to ' + l4ManagerEmail);
+              }
+            });
+          }
+        }).catch((err) => {
+          console.log("Error finding L4 Manager details: ", err);
+        });
 
         ////Creating a row in L4Appraisal Table///////////
         if (!(isNull(L4Manager)) && !(L4Manager === topManager)) {
@@ -1837,37 +1850,37 @@ module.exports = function (app) {
           });
         }
 
-         // Send email to L5Manager
-      Employees.findOne({
-        attributes: ['officialEmail'],
-        where: { employeeId: L5Manager },
-        raw: true
-      }).then((l5ManagerDetails) => {
-        if (l5ManagerDetails) {
-          const l5ManagerEmail = l5ManagerDetails.officialEmail;
-          const htmlFilePath = path.join('Mails/mangAppMail.ejs');
-          const htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
-          let mailOptions = {
-            from: 'support@timesofpeople.com',
-            to: l5ManagerEmail,
-            subject: 'You Have Been Assigned as an Evaluator',
-            text: `Dear Manager,\n\nYou have been assigned as an evaluator for an employee. Please review the employee's evaluation.\n\nRegards,\Mckinsol Consulting Inc.`,
-            html: htmlContent,
-          };
+        // Send email to L5Manager
+        Employees.findOne({
+          attributes: ['officialEmail'],
+          where: { employeeId: L5Manager },
+          raw: true
+        }).then((l5ManagerDetails) => {
+          if (l5ManagerDetails) {
+            const l5ManagerEmail = l5ManagerDetails.officialEmail;
+            const htmlFilePath = path.join('Mails/mangAppMail.ejs');
+            const htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
+            let mailOptions = {
+              from: 'support@timesofpeople.com',
+              to: l5ManagerEmail,
+              subject: 'You Have Been Assigned as an Evaluator',
+              text: `Dear Manager,\n\nYou have been assigned as an evaluator for an employee. Please review the employee's evaluation.\n\nRegards,\Mckinsol Consulting Inc.`,
+              html: htmlContent,
+            };
 
-          console.log(l5ManagerEmail);
+            console.log(l5ManagerEmail);
 
-          transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-              console.log(error);
-            } else {
-              console.log('Email sent to ' + l5ManagerEmail);
-            }
-          });
-        }
-      }).catch((err) => {
-        console.log("Error finding L5 Manager details: ", err);
-      });
+            transporter.sendMail(mailOptions, function (error, info) {
+              if (error) {
+                console.log(error);
+              } else {
+                console.log('Email sent to ' + l5ManagerEmail);
+              }
+            });
+          }
+        }).catch((err) => {
+          console.log("Error finding L5 Manager details: ", err);
+        });
 
         ////Creating a row in Manager Table///////////
         await Manager.create({ appraisalId: req.body.appraisalId }).then((data) => { console.log("Enteries created successfully in Manager Table") }).catch((err) => {
@@ -1917,14 +1930,14 @@ module.exports = function (app) {
         })
           .then((data) => {
             console.log("Updated Successfully");
-    
+
           })
           .catch(error => {
             console.error('Error updating records:', error);
-            
+
           });
-      
-          const sum = parseInt(req.body.communicationSkill) +
+
+        const sum = parseInt(req.body.communicationSkill) +
           parseInt(req.body.interpersonalSkill) +
           parseInt(req.body.abilityToPlanTheWork) +
           parseInt(req.body.problemSolving) +
@@ -2502,6 +2515,7 @@ module.exports = function (app) {
       let l4Details;
       let l5Details;
       let employeeId;
+      let amount = {};
       await empAppraisal.findOne({ where: { appraisalId: id }, raw: true }).then((data) => {
         if (data) {
           employeeId = data.employeeId;
@@ -2524,7 +2538,8 @@ module.exports = function (app) {
       console.log("details::::", details);
       await empAppraisal.findOne({ where: { appraisalId: id }, raw: true }).then((data) => {
         if (data) {
-          empDetails = data;
+           delete(data.status);
+           empDetails = data;
         }
         else {
           empDetails = null
@@ -2550,7 +2565,7 @@ module.exports = function (app) {
           l3Details = null;
         }
       })
-    
+
       await L4Appraisal.findOne({ where: { appraisalId: id }, raw: true }).then((data) => {
         if (data) {
           l4Details = data;
@@ -2567,6 +2582,47 @@ module.exports = function (app) {
           l5Details = null;
         }
       })
+
+      const info = await empAppraisal.findOne({ where: { appraisalId: id }, raw: true, attributes: ['status'] });
+      console.log("status::::", info.status);
+      if (info.status == "Sent to HR"|| info.status == "Completed") {
+        console.log(req.body.appraisalId);
+        const aDetails = await Manager.findOne({ where: { appraisalId: req.body.appraisalId }, raw: true });
+        const date = new Date;
+        console.log("date::::::::", date);
+        const cYear = date.getFullYear();
+        console.log("Current Year::::", cYear);
+        const rawQuery = `SELECT ExcellentAmount,VgoodAmount,GoodAmount,AverageAmount FROM (employees AS E INNER JOIN empappraisals AS A ON E.employeeId = A.employeeId)INNER JOIN hrappraisalratingamounts AS H ON E.departmentId = H.departmentId WHERE A.appraisalId=${id} AND E.designation = H.designation AND H.year=${cYear}`;
+        const OverallRating = aDetails.managersOverallRating;
+        console.log(OverallRating);
+
+       await sequelize.query(rawQuery, {
+          type: Sequelize.QueryTypes.SELECT,
+        }).then((data) => {
+          console.log("Querydata::::::::::",data);
+          if (OverallRating == "Excellent") {
+            amount["amount"] = data[0].ExcellentAmount
+          } else if (OverallRating == "Very Good") {
+            amount["amount"] = data[0].VgoodAmount
+          } else if (OverallRating == "Good") {
+            amount["amount"] = data[0].GoodAmount
+          } else if (OverallRating == "Average") {
+            amount["amount"] = data[0].AverageAmount
+          };
+        }).catch((err) => {
+          console.log(err);
+          // res.send(err).status(400);
+        })
+      }
+      else {
+        amount["amount"] = null;
+      };
+      console.log("amount::::::::::::::",amount);
+
+
+
+
+
       let topManager;
       if (details.L5ManagerId != null) {
         topManager = details.L5ManagerId;
@@ -2583,44 +2639,49 @@ module.exports = function (app) {
       console.log("topmanager:::", topManager);
       if (managerId == details.L2ManagerId) {
         if (managerId == topManager) {
-          let L2Details = {...empDetails, ...l2Details, ...l5Details }
-          
+          let L2Details = { ...empDetails, ...l2Details, ...l5Details }
+
           result.push(L2Details);
         }
         else {
-          let L2Details = {...empDetails, ...l2Details}
+          let L2Details = { ...empDetails, ...l2Details }
           result.push(L2Details)
         }
       }
       if (managerId == details.L3ManagerId) {
         if (managerId == topManager) {
-          let L3Details = {...empDetails, ...l2Details, ...l5Details}
-          
+          let L3Details = { ...empDetails, ...l2Details, ...l5Details }
+
           result.push(L3Details);
         }
         else {
-          let L3Details = {...empDetails, ...l2Details, ...l3Details }
+          let L3Details = { ...empDetails, ...l2Details, ...l3Details }
           result.push(L3Details)
         }
       }
       if (managerId == details.L4ManagerId) {
         if (managerId == topManager) {
           let L4Details = { ...empDetails, ...l2Details, ...l3Details, ...l4Details, ...l5Details }
-          
+
           result.push(L4Details)
-          console.log("L4Details :::::::::::::", l4Details )
+          console.log("L4Details :::::::::::::", l4Details)
         }
         else {
-          let L4Details = {...empDetails, ...l2Details , ...l3Details , ...l4Details}
+          let L4Details = { ...empDetails, ...l2Details, ...l3Details, ...l4Details }
           result.push(L4Details)
         }
-        console.log("L4Details :::::::::::::", l4Details )
+        console.log("L4Details :::::::::::::", l4Details)
       }
-      
-      if (managerId == details.L5ManagerId || managerId == details.hrId) {
-        let L5Details = {...empDetails, ...l2Details , ...l3Details , ...l4Details, ...l5Details}
-        
+
+      if (managerId == details.L5ManagerId) {
+        let L5Details = { ...empDetails, ...l2Details, ...l3Details, ...l4Details, ...l5Details }
+
         result.push(L5Details)
+      }
+      if (managerId == details.hrId) {
+        let hrDetails = { ...empDetails, ...l2Details, ...l3Details, ...l4Details, ...l5Details, ...amount}
+
+        result.push(hrDetails)
       }
       // if(managerId == top)
       // result.push(empDetails, l2Details, l3Details, l4Details, l5Details)
@@ -2644,7 +2705,7 @@ module.exports = function (app) {
       let l4Details;
       let l5Details;
       let employeeId;
-      
+
       // Fetching employeeId based on appraisalId
       await empAppraisal.findOne({ where: { appraisalId: id }, raw: true }).then((data) => {
         if (data) {
@@ -2653,7 +2714,7 @@ module.exports = function (app) {
       }).catch((err) => {
         console.log(err);
       });
-  
+
       let details;
       // Fetching manager details
       await empMang.findOne({ where: { employeeId: employeeId }, raw: true, attributes: ['employeeId', 'L2ManagerId', 'L3ManagerId', 'L4ManagerId', 'L5ManagerId', 'hrId'] }).then((data) => {
@@ -2662,7 +2723,7 @@ module.exports = function (app) {
       }).catch((err) => {
         console.log(err);
       });
-  
+
       // Fetching details for various levels of appraisal
       await empAppraisal.findOne({ where: { appraisalId: id }, raw: true }).then((data) => {
         if (data) {
@@ -2673,7 +2734,7 @@ module.exports = function (app) {
       }).catch((err) => {
         console.log(err);
       });
-  
+
       await L2Appraisal.findOne({ where: { appraisalId: id }, raw: true }).then((data) => {
         if (data) {
           l2Details = data;
@@ -2683,7 +2744,7 @@ module.exports = function (app) {
       }).catch((err) => {
         console.log(err);
       });
-  
+
       await L3Appraisal.findOne({ where: { appraisalId: id }, raw: true }).then((data) => {
         if (data) {
           l3Details = data;
@@ -2693,7 +2754,7 @@ module.exports = function (app) {
       }).catch((err) => {
         console.log(err);
       });
-      
+
       await L4Appraisal.findOne({ where: { appraisalId: id }, raw: true }).then((data) => {
         if (data) {
           l4Details = data;
@@ -2703,7 +2764,7 @@ module.exports = function (app) {
       }).catch((err) => {
         console.log(err);
       });
-  
+
       await Manager.findOne({ where: { appraisalId: id }, raw: true }).then((data) => {
         if (data) {
           l5Details = data;
@@ -2713,7 +2774,7 @@ module.exports = function (app) {
       }).catch((err) => {
         console.log(err);
       });
-  
+
       let topManager;
       // Determining topManager based on available managerIds
       if (details.L5ManagerId != null) {
@@ -2729,39 +2790,39 @@ module.exports = function (app) {
         topManager = null;
       }
       console.log("topmanager:::", topManager);
-  
+
       // Adding isTopManager flag based on the managerId
       if (managerId == details.L2ManagerId) {
-        let L2Details = {...empDetails, ...l2Details};
+        let L2Details = { ...empDetails, ...l2Details };
         L2Details.isTopManager = (managerId == topManager) ? 1 : 0;
         result.push(L2Details);
       }
       if (managerId == details.L3ManagerId) {
-        let L3Details = {...empDetails, ...l2Details, ...l3Details};
+        let L3Details = { ...empDetails, ...l2Details, ...l3Details };
         L3Details.isTopManager = (managerId == topManager) ? 1 : 0;
         result.push(L3Details);
       }
       if (managerId == details.L4ManagerId) {
-        let L4Details = { ...empDetails, ...l2Details, ...l3Details, ...l4Details};
+        let L4Details = { ...empDetails, ...l2Details, ...l3Details, ...l4Details };
         L4Details.isTopManager = (managerId == topManager) ? 1 : 0;
         result.push(L4Details);
       }
-      
+
       if (managerId == details.L5ManagerId || managerId == details.hrId) {
-        let temp = {...empDetails, ...l2Details, ...l3Details, ...l4Details, ...l5Details};
-        let L5Details = {...temp};
+        let temp = { ...empDetails, ...l2Details, ...l3Details, ...l4Details, ...l5Details };
+        let L5Details = { ...temp };
         L5Details.isTopManager = (managerId == topManager) ? 1 : 0;
         result.push(L5Details);
       }
-  
+
       res.json({ "data": result }).status(200);
     } catch (e) {
       console.log(e);
       res.status(400).json({ "message": e });
     }
   });
-  
-  
+
+
   apiRoutes.post('/employees', async (req, res) => {//It is used to generate all active employee list
     try {
       Employees.findAll({
@@ -3192,10 +3253,10 @@ module.exports = function (app) {
   //     if (req.body.entries && req.body.entries.length > 0) {
   //       const entries = req.body.entries;
   //       const employeeId = entries[0].employee;
-  
+
   //       // Check if entries already exist for the employee
   //       const existingEntry = await empMang.findOne({ where: { employeeId: employeeId }, raw: true });
-        
+
   //       // Check if appraisal process exists with a status other than "Initiated"
   //       const latestAppraisal = await empAppraisal.findOne({
   //         where: { employeeId: employeeId },
@@ -3219,12 +3280,12 @@ module.exports = function (app) {
   //             res.status(400).json({ "message": err });
   //           });
   //         }
-  
+
   //         if (latestAppraisal && latestAppraisal.status !== 'Initiated') {
   //           // Send additional flag and message if appraisal exists and not initiated
   //           return res.status(400).json({ "flag": 1, "message": "Can't Update Managers: Appraisal Already Processed" });
   //         }
-  
+
   //         res.json({ "message": "Entries Updated Successfully" }).status(200);
   //       } else {
   //         // Store new entries
@@ -3234,11 +3295,11 @@ module.exports = function (app) {
   //         const l4 = entries[i].l4Manager;
   //         const l5 = entries[i].l5Manager;
   //         const hr = entries[i].hr;
-          
+
   //         if (emp == l2 || emp == l3 || emp == l4 || emp == l5 || emp == hr) {
   //           return res.status(400).json({ "message": "Employee and manager cannot be same" });
   //         }
-  
+
   //         await empMang.create({
   //           employeeId: emp,
   //           L2ManagerId: l2,
