@@ -2001,52 +2001,61 @@ module.exports = function (app) {
       const hrId = req.body.employeeId;
       console.log("hrId::::", hrId);
       const date = new Date();
-      for(i=0;i<entries.length;i++){
-      const managerInfo = await empMang.findAll({ where: { employeeId: entries[i].employeeId }, raw: true });
-      if (managerInfo.length == 0) {
-        console.log("Worflow or Appraisal Amount setup is missing for one or more employees")
-        res.status(400).json({ "message": "Create workflow first for all employees" });
+      for (i = 0; i < entries.length; i++) {
+        const managerInfo = await empMang.findAll({ where: { employeeId: entries[i].employeeId }, raw: true });
+        const empInfo = await Employees.findOne({ where: { employeeId: entries[i].employeeId }, raw: true,attributes:['departmentId','designation','firstName','lastName']});
+        const amountInfo = await hrAmount.findAll({where:{departmentId:empInfo.departmentId,designation:empInfo.designation},raw:true});
+        console.log(managerInfo);
+        console.log(empInfo);
+        console.log(amountInfo);
 
-      } 
-      return
-    }
-      
-      
-      
-        for (let i = 0; i < entries.length; i++) {
-          const randomSixDigitNumber = Math.floor(100000 + Math.random() * 900000);
-          console.log("Random appraisalId for index value", i, "::::", randomSixDigitNumber);
-          await empAppraisal.create({ appraisalId: randomSixDigitNumber, employeeId: entries[i].employeeId, createdAt: date, status: "Initiated", hrId: hrId });
-          const employee = await Employees.findOne({
-            where: {
-              employeeId: entries[i].employeeId
-            },
-            attributes: ['officialEmail']
-          }); console.log(employee); if (employee && employee.officialEmail) {
-            // Setup email data
-            const htmlFilePath = path.join('Mails/empAppMail.ejs');
-            const htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
-            const mailOptions = {
-              from: 'support@timesofpeople.com',
-              to: employee.officialEmail,
-              subject: 'Appraisal Initiated Appraisal ID : ' + res.appraisalId,
-              text: 'Your appraisal has been initiated',
-              html: htmlContent,
-            };          // Send the email
-            transporter.sendMail(mailOptions, (error, info) => {
-              if (error) {
-                console.log('Error sending email:', error);
-              } else {
-                console.log('Email sent to ::::', employee.officialEmail);
-                console.log('Email sent:', info.response);
-              }
-            });
-          } else {
-            console.log('Employee email not found or invalid');
-          }
-        } res.status(200).json({ "message": "Entries Created" });
+        if (managerInfo.length == 0) {
+          console.log(`Worflow setup is missing for ${empInfo.firstName} ${empInfo.lastName}`)
+          res.status(400).json({ "message": `Workflow is missing for ${empInfo.firstName} ${empInfo.lastName}` });
+          return
+        }
+        if (amountInfo.length == 0) {
+          console.log(`Approved Amount setup is missing for ${empInfo.firstName} ${empInfo.lastName}`)
+          res.status(400).json({ "message": `Approved Amount setup is missing for the designation ${empInfo.designation}` });
+          return
+        }
+
       }
-     catch (err) {
+      for (let i = 0; i < entries.length; i++) {
+        const randomSixDigitNumber = Math.floor(100000 + Math.random() * 900000);
+        console.log("Random appraisalId for index value", i, "::::", randomSixDigitNumber);
+        await empAppraisal.create({ appraisalId: randomSixDigitNumber, employeeId: entries[i].employeeId, createdAt: date, status: "Initiated", hrId: hrId });
+        const employee = await Employees.findOne({
+          where: {
+            employeeId: entries[i].employeeId
+          },
+          attributes: ['officialEmail']
+        }); console.log(employee); if (employee && employee.officialEmail) {
+          // Setup email data
+          const htmlFilePath = path.join('Mails/empAppMail.ejs');
+          const htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
+          const mailOptions = {
+            from: 'support@timesofpeople.com',
+            to: employee.officialEmail,
+            subject: 'Appraisal Initiated Appraisal ID : ' + res.appraisalId,
+            text: 'Your appraisal has been initiated',
+            html: htmlContent,
+          };          // Send the email
+          transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+              console.log('Error sending email:', error);
+            } else {
+              console.log('Email sent to ::::', employee.officialEmail);
+              console.log('Email sent:', info.response);
+            }
+          });
+        } else {
+          console.log('Employee email not found or invalid');
+        }
+      } 
+      res.status(200).json({ "message": "Entries Created" });
+    }
+    catch (err) {
       console.log(err);
       res.status(400).json({ "message": err });
     }
@@ -3069,6 +3078,21 @@ module.exports = function (app) {
     try {
       // const empId = Employees.findOne({where:})
       const employeeId = req.body.entries[0].employee;
+      const latestAppraisal = await empAppraisal.findOne({
+        where: { employeeId: employeeId },
+        order: [['createdAt', 'DESC']],
+        raw: true
+      });
+      console.log("latestAppraisal:::", latestAppraisal);
+      if (Object.keys(latestAppraisal).length !== 0) {
+        if (latestAppraisal.status != "Initiated" && latestAppraisal.status != "Completed") {
+          res.status(400).json({ "message": "Managers Updation is not allowed if appraisal is in progress" });
+          return
+
+        }
+      }
+
+      // latestAppraisal will contain the entry with the latest createdAt date for the given employeeId
       console.log("employeeId:::", employeeId);
       // const arrayName = name.split(' ');
       // console.log("name:::", arrayName);
