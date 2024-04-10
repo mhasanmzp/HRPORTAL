@@ -1997,41 +1997,56 @@ module.exports = function (app) {
   apiRoutes.post("/initiateAppraisal", async (req, res) => {
     try {
       console.log("req.body::::", req.body);
+      const entries = req.body.entries;
       const hrId = req.body.employeeId;
-      console.log("hrId::::", hrId); const date = new Date();
-      const entries = req.body.entries; for (let i = 0; i < entries.length; i++) {
-        const randomSixDigitNumber = Math.floor(100000 + Math.random() * 900000);
-        console.log("Random appraisalId for index value", i, "::::", randomSixDigitNumber);
-        await empAppraisal.create({ appraisalId: randomSixDigitNumber, employeeId: entries[i].employeeId, createdAt: date, status: "Initiated", hrId: hrId });
-        const employee = await Employees.findOne({
-          where: {
-            employeeId: entries[i].employeeId
-          },
-          attributes: ['officialEmail']
-        }); console.log(employee); if (employee && employee.officialEmail) {
-          // Setup email data
-          const htmlFilePath = path.join('Mails/empAppMail.ejs');
-          const htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
-          const mailOptions = {
-            from: 'support@timesofpeople.com',
-            to: employee.officialEmail,
-            subject: 'Appraisal Initiated Appraisal ID : ' + res.appraisalId,
-            text: 'Your appraisal has been initiated',
-            html: htmlContent,
-          };          // Send the email
-          transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-              console.log('Error sending email:', error);
-            } else {
-              console.log('Email sent to ::::', employee.officialEmail);
-              console.log('Email sent:', info.response);
-            }
-          });
-        } else {
-          console.log('Employee email not found or invalid');
-        }
-      } res.status(200).json({ "message": "Entries Created" });
-    } catch (err) {
+      console.log("hrId::::", hrId);
+      const date = new Date();
+      for(i=0;i<entries.length;i++){
+      const managerInfo = await empMang.findAll({ where: { employeeId: entries[i].employeeId }, raw: true });
+      if (managerInfo.length == 0) {
+        console.log("Worflow is not created yet for all employees")
+        res.status(400).json({ "message": "Create workflow first for all employees" });
+
+      } 
+      return
+    }
+      
+      
+      
+        for (let i = 0; i < entries.length; i++) {
+          const randomSixDigitNumber = Math.floor(100000 + Math.random() * 900000);
+          console.log("Random appraisalId for index value", i, "::::", randomSixDigitNumber);
+          await empAppraisal.create({ appraisalId: randomSixDigitNumber, employeeId: entries[i].employeeId, createdAt: date, status: "Initiated", hrId: hrId });
+          const employee = await Employees.findOne({
+            where: {
+              employeeId: entries[i].employeeId
+            },
+            attributes: ['officialEmail']
+          }); console.log(employee); if (employee && employee.officialEmail) {
+            // Setup email data
+            const htmlFilePath = path.join('Mails/empAppMail.ejs');
+            const htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
+            const mailOptions = {
+              from: 'support@timesofpeople.com',
+              to: employee.officialEmail,
+              subject: 'Appraisal Initiated Appraisal ID : ' + res.appraisalId,
+              text: 'Your appraisal has been initiated',
+              html: htmlContent,
+            };          // Send the email
+            transporter.sendMail(mailOptions, (error, info) => {
+              if (error) {
+                console.log('Error sending email:', error);
+              } else {
+                console.log('Email sent to ::::', employee.officialEmail);
+                console.log('Email sent:', info.response);
+              }
+            });
+          } else {
+            console.log('Employee email not found or invalid');
+          }
+        } res.status(200).json({ "message": "Entries Created" });
+      }
+     catch (err) {
       console.log(err);
       res.status(400).json({ "message": err });
     }
