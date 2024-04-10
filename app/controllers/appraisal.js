@@ -2004,7 +2004,7 @@ module.exports = function (app) {
       for(i=0;i<entries.length;i++){
       const managerInfo = await empMang.findAll({ where: { employeeId: entries[i].employeeId }, raw: true });
       if (managerInfo.length == 0) {
-        console.log("Worflow is not created yet for all employees")
+        console.log("Worflow or Appraisal Amount setup is missing for one or more employees")
         res.status(400).json({ "message": "Create workflow first for all employees" });
 
       } 
