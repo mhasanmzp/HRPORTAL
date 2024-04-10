@@ -2001,10 +2001,11 @@ module.exports = function (app) {
       const hrId = req.body.employeeId;
       console.log("hrId::::", hrId);
       const date = new Date();
+      const year = date.getFullYear();
       for (i = 0; i < entries.length; i++) {
         const managerInfo = await empMang.findAll({ where: { employeeId: entries[i].employeeId }, raw: true });
         const empInfo = await Employees.findOne({ where: { employeeId: entries[i].employeeId }, raw: true,attributes:['departmentId','designation','firstName','lastName']});
-        const amountInfo = await hrAmount.findAll({where:{departmentId:empInfo.departmentId,designation:empInfo.designation},raw:true});
+        const amountInfo = await hrAmount.findAll({where:{departmentId:empInfo.departmentId,designation:empInfo.designation,year:year},raw:true});
         console.log(managerInfo);
         console.log(empInfo);
         console.log(amountInfo);
@@ -2016,7 +2017,7 @@ module.exports = function (app) {
         }
         if (amountInfo.length == 0) {
           console.log(`Approved Amount per slab setup is missing for ${empInfo.firstName} ${empInfo.lastName}`)
-          res.status(400).json({ "message": `Approved amount per slab setup is missing for the designation ${empInfo.designation}` });
+          res.status(400).json({ "message": `Approved amount per slab setup is missing for the designation ${empInfo.designation} for the year ${year}` });
           return
         }
 
