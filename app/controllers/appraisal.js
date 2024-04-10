@@ -2016,7 +2016,7 @@ module.exports = function (app) {
         }
         if (amountInfo.length == 0) {
           console.log(`Approved Amount per slab setup is missing for ${empInfo.firstName} ${empInfo.lastName}`)
-          res.status(400).json({ "message": `Approved Amount setup is missing for the designation ${empInfo.designation}` });
+          res.status(400).json({ "message": `Approved amount per slab setup is missing for the designation ${empInfo.designation}` });
           return
         }
 
