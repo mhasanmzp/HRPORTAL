@@ -51,33 +51,33 @@ module.exports = function (app) {
   });
 
   apiRoutes.post("/hrResponse", async (req, res) => {
-    try{
+    try {
 
-    
-    console.log("req.body::::::", req.body);
-    const flag = req.body.flag;
-    if (flag == 1) {
-      empAppraisal.update({ status: "Completed" }, { where: { appraisalId: req.body.appraisalId } }).then((data) => {
-        res.json({ "message": "Appraisal process completed successfully" }).status(200);
-        console.log("Status updated successfully");
-      }).catch((err) => {
-        console.log(err);
-      })
-    }
-    else{
-      empAppraisal.update({ status: "Appraisal Rejected" }, { where: { appraisalId: req.body.appraisalId } }).then((data) => {
-        res.status(400).json({ "message": "Appraisal process has been rejected" });
-        console.log("Status updated successfully");
-      }).catch((err) => {
-        console.log(err);
-      })
-    }
-  }
-  catch(e){
-    res.status(400).json(e);
-  }
 
-    });
+      console.log("req.body::::::", req.body);
+      const flag = req.body.flag;
+      if (flag == 1) {
+        empAppraisal.update({ status: "Completed" }, { where: { appraisalId: req.body.appraisalId } }).then((data) => {
+          res.json({ "message": "Appraisal process completed successfully" }).status(200);
+          console.log("Status updated successfully");
+        }).catch((err) => {
+          console.log(err);
+        })
+      }
+      else {
+        empAppraisal.update({ status: "Appraisal Rejected" }, { where: { appraisalId: req.body.appraisalId } }).then((data) => {
+          res.status(400).json({ "message": "Appraisal process has been rejected" });
+          console.log("Status updated successfully");
+        }).catch((err) => {
+          console.log(err);
+        })
+      }
+    }
+    catch (e) {
+      res.status(400).json(e);
+    }
+
+  });
 
   apiRoutes.post("/oldmanagersEvaluation", async (req, res) => {//old
     try {
@@ -2216,7 +2216,7 @@ module.exports = function (app) {
         });
       }
 
-      console.log("employee Information::::::", employeeInfo);
+      // console.log("employee Information::::::", employeeInfo);
 
       for (let i = 0; i < employeeInfo.length; i++) {
         const appraisalInfo = await empAppraisal.findAll({
@@ -2538,8 +2538,8 @@ module.exports = function (app) {
       console.log("details::::", details);
       await empAppraisal.findOne({ where: { appraisalId: id }, raw: true }).then((data) => {
         if (data) {
-           delete(data.status);
-           empDetails = data;
+          delete (data.status);
+          empDetails = data;
         }
         else {
           empDetails = null
@@ -2585,7 +2585,7 @@ module.exports = function (app) {
 
       const info = await empAppraisal.findOne({ where: { appraisalId: id }, raw: true, attributes: ['status'] });
       console.log("status::::", info.status);
-      if (info.status == "Sent to HR"|| info.status == "Completed") {
+      if (info.status == "Sent to HR" || info.status == "Completed") {
         console.log(req.body.appraisalId);
         const aDetails = await Manager.findOne({ where: { appraisalId: req.body.appraisalId }, raw: true });
         const date = new Date;
@@ -2596,10 +2596,10 @@ module.exports = function (app) {
         const OverallRating = aDetails.managersOverallRating;
         console.log(OverallRating);
 
-       await sequelize.query(rawQuery, {
+        await sequelize.query(rawQuery, {
           type: Sequelize.QueryTypes.SELECT,
         }).then((data) => {
-          console.log("Querydata::::::::::",data);
+          console.log("Querydata::::::::::", data);
           if (OverallRating == "Excellent") {
             amount["amount"] = data[0].ExcellentAmount
           } else if (OverallRating == "Very Good") {
@@ -2617,7 +2617,7 @@ module.exports = function (app) {
       else {
         amount["amount"] = null;
       };
-      console.log("amount::::::::::::::",amount);
+      console.log("amount::::::::::::::", amount);
 
 
 
@@ -2679,7 +2679,7 @@ module.exports = function (app) {
         result.push(L5Details)
       }
       if (managerId == details.hrId) {
-        let hrDetails = { ...empDetails, ...l2Details, ...l3Details, ...l4Details, ...l5Details, ...amount}
+        let hrDetails = { ...empDetails, ...l2Details, ...l3Details, ...l4Details, ...l5Details, ...amount }
 
         result.push(hrDetails)
       }
@@ -2821,7 +2821,6 @@ module.exports = function (app) {
       res.status(400).json({ "message": e });
     }
   });
-
 
   apiRoutes.post('/employees', async (req, res) => {//It is used to generate all active employee list
     try {
@@ -2987,68 +2986,68 @@ module.exports = function (app) {
   //new empmangStore is below
   apiRoutes.post('/empmangStore', async (req, res) => {
     try {
-        console.log("req.body", req.body);
-        const entries = req.body.entries;
+      console.log("req.body", req.body);
+      const entries = req.body.entries;
 
-        // Function to check for duplicates in an array
-        function hasDuplicates(managerIds) {
-            const encountered = new Set();
+      // Function to check for duplicates in an array
+      function hasDuplicates(managerIds) {
+        const encountered = new Set();
 
-            for (const id of managerIds) {
-                if (encountered.has(id)) {
-                    return 1; // Found a duplicate
-                } else {
-                    encountered.add(id);
-                }
-            }
-
-            return 0; // No duplicates found
+        for (const id of managerIds) {
+          if (encountered.has(id)) {
+            return 1; // Found a duplicate
+          } else {
+            encountered.add(id);
+          }
         }
 
-        // Check for duplicate manager IDs
-        const entry = entries[0];
-        let managerIds = [entry.l2Manager, entry.l3Manager, entry.l4Manager, entry.l5Manager];
-        
-        // Remove null values from managerIds array
-        managerIds = managerIds.filter(id => id !== null);
+        return 0; // No duplicates found
+      }
 
-        console.log("managerIds:::", managerIds);
-        if (hasDuplicates(managerIds)) {
-            res.status(400).json({ "message": "Managers at different levels must not be the same" });
-            return;
-        }
+      // Check for duplicate manager IDs
+      const entry = entries[0];
+      let managerIds = [entry.l2Manager, entry.l3Manager, entry.l4Manager, entry.l5Manager];
 
-        // Check if employee is the same as any manager or HR
-        if (entry.employee === entry.l2Manager || entry.employee === entry.l3Manager || entry.employee === entry.l4Manager || entry.employee === entry.l5Manager || entry.employee === entry.hr) {
-            res.status(400).json({ "message": "Employee and manager cannot be the same" });
-            return;
-        }
+      // Remove null values from managerIds array
+      managerIds = managerIds.filter(id => id !== null);
 
-        // Check if entries already exist for the selected employee
-        const info = await empMang.findOne({ where: { employeeId: entries[0].employee }, raw: true });
-        if (info) {
-            res.status(400).json({ "message": "Entries already present for the selected employee" });
-            return;
-        }
+      console.log("managerIds:::", managerIds);
+      if (hasDuplicates(managerIds)) {
+        res.status(400).json({ "message": "Managers at different levels must not be the same" });
+        return;
+      }
 
-        // Create entries in the database
-        for (let i = 0; i < entries.length; i++) {
-            const entry = entries[i];
-            await empMang.create({
-                employeeId: entry.employee,
-                L2ManagerId: entry.l2Manager,
-                L3ManagerId: entry.l3Manager,
-                L4ManagerId: entry.l4Manager,
-                L5ManagerId: entry.l5Manager,
-                hrId: entry.hr
-            });
-        }
+      // Check if employee is the same as any manager or HR
+      if (entry.employee === entry.l2Manager || entry.employee === entry.l3Manager || entry.employee === entry.l4Manager || entry.employee === entry.l5Manager || entry.employee === entry.hr) {
+        res.status(400).json({ "message": "Employee and manager cannot be the same" });
+        return;
+      }
 
-        res.status(200).json({ "message": "Entries Created" });
+      // Check if entries already exist for the selected employee
+      const info = await empMang.findOne({ where: { employeeId: entries[0].employee }, raw: true });
+      if (info) {
+        res.status(400).json({ "message": "Entries already present for the selected employee" });
+        return;
+      }
+
+      // Create entries in the database
+      for (let i = 0; i < entries.length; i++) {
+        const entry = entries[i];
+        await empMang.create({
+          employeeId: entry.employee,
+          L2ManagerId: entry.l2Manager,
+          L3ManagerId: entry.l3Manager,
+          L4ManagerId: entry.l4Manager,
+          L5ManagerId: entry.l5Manager,
+          hrId: entry.hr
+        });
+      }
+
+      res.status(200).json({ "message": "Entries Created" });
     } catch (e) {
-        res.status(400).json({ "message": e.message || "An error occurred" });
+      res.status(400).json({ "message": e.message || "An error occurred" });
     }
-});
+  });
 
   apiRoutes.post('/empmangUpdate', async (req, res) => {
 
@@ -3092,32 +3091,32 @@ module.exports = function (app) {
         const encountered = new Set();
 
         for (const id of managerIds) {
-            if (encountered.has(id)) {
-                return 1; // Found a duplicate
-            } else {
-                encountered.add(id);
-            }
+          if (encountered.has(id)) {
+            return 1; // Found a duplicate
+          } else {
+            encountered.add(id);
+          }
         }
 
         return 0; // No duplicates found
-    }
+      }
 
-    // Check for duplicate manager IDs
-    const entry = entries[0];
-    let managerIds = [entry.l2Manager, entry.l3Manager, entry.l4Manager, entry.l5Manager];
-    
-    // Remove null values from managerIds array
-    managerIds = managerIds.filter(id => id !== null);
+      // Check for duplicate manager IDs
+      const entry = entries[0];
+      let managerIds = [entry.l2Manager, entry.l3Manager, entry.l4Manager, entry.l5Manager];
 
-    console.log("managerIds:::", managerIds);
-    if (hasDuplicates(managerIds)) {
+      // Remove null values from managerIds array
+      managerIds = managerIds.filter(id => id !== null);
+
+      console.log("managerIds:::", managerIds);
+      if (hasDuplicates(managerIds)) {
         res.status(400).json({ "message": "Managers at different levels must not be the same" });
         return;
-    }
-    if (entry.employee === entry.l2Manager || entry.employee === entry.l3Manager || entry.employee === entry.l4Manager || entry.employee === entry.l5Manager || entry.employee === entry.hr) {
-      res.status(400).json({ "message": "Employee and manager cannot be the same" });
-      return;
-  }
+      }
+      if (entry.employee === entry.l2Manager || entry.employee === entry.l3Manager || entry.employee === entry.l4Manager || entry.employee === entry.l5Manager || entry.employee === entry.hr) {
+        res.status(400).json({ "message": "Employee and manager cannot be the same" });
+        return;
+      }
 
 
       for (let i = 0; i < entries.length; i++) {
