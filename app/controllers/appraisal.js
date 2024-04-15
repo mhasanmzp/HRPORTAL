@@ -1659,6 +1659,7 @@ module.exports = function (app) {
 
   apiRoutes.post("/allAppraisalInfoOfAnEmp", async (req, res) => {//for the employee main screen 
     try {
+      console.log("req.body:::",req.body);
 
 
       const id = req.body.employeeId;
@@ -2847,7 +2848,7 @@ module.exports = function (app) {
     }
   });
 
-  apiRoutes.post('/employees', async (req, res) => {//It is used to generate all active employee list
+  apiRoutes.post('/oldemployees', async (req, res) => {//It is used to generate all active employee list
     try {
       Employees.findAll({
         where: { isActive: 1 }, attributes: ['employeeId',
@@ -2865,6 +2866,26 @@ module.exports = function (app) {
       res.status(400).json({ "message": e });
     }
   });
+
+  apiRoutes.post('/employees', async (req, res) => {//It is used to generate all active employee list
+    try {
+      Employees.findAll({
+        where: { isActive: 1 }, 
+        attributes: ['employeeId', [sequelize.literal('CONCAT_WS(" ", COALESCE(firstname, ""), COALESCE(lastName, ""))'), 'Name'], 'designation'], 
+        raw: true
+      }).then((data) => {
+        console.log(data);
+        res.status(200).json({ "data": data });
+      }).catch((err) => {
+        console.log(err);
+        res.status(400).json({ "message": err });
+      });
+    }
+    catch (e) {
+      res.status(400).json({ "message": e });
+    }
+  });
+  
 
   apiRoutes.post('/hrList', async (req, res) => {//It is used to generate all employee list
 
@@ -3087,7 +3108,7 @@ module.exports = function (app) {
       console.log("latestAppraisal:::", latestAppraisal);
       if (Object.keys(latestAppraisal).length !== 0) {
         if (latestAppraisal.status != "Initiated" && latestAppraisal.status != "Completed") {
-          res.status(400).json({ "message": "Managers Updation is not allowed if appraisal is in progress" });
+          res.status(400).json({ "message": "Managers Updation is not allowed if the Appraisal Process is in progress" });
           return
 
         }
