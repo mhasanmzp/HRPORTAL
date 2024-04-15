@@ -1,4 +1,4 @@
-const express = require("express");
+const express = require ("express");
 const Sequelize = require("sequelize");
 const nodemailer = require("nodemailer");
 const { QueryTypes } = require("sequelize");
