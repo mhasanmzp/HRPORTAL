@@ -1583,6 +1583,64 @@ module.exports = function (app) {
     }
   });
 
+  // apiRoutes.post("/anAppraisalDetailsOfEmpEval1", async (req, res) => {
+  //   console.log("*********************************AnAppraisalDetailsOfEmpEval")
+  //   try {
+  //     const employeeId = parseInt(req.body.employeeId);
+  //     const details = await empAppraisal.findAll({ where: { appraisalId: req.body.appraisalId }, raw: true });
+  
+  //     // Check if any details were found
+  //     if (details.length === 0) {
+  //       return res.status(404).json({ "message": "No details found for the given appraisalId" });
+  //     }
+  //     const L2Manager = details[0].assignedL2Manager;
+  //     const L3Manager = details[0].assignedL3Manager;
+  //     const L4Manager = details[0].assignedL4Manager;
+  //     const L5Manager = details[0].assignedL5Manager;
+  
+  //     switch (employeeId) {
+  //       case L2Manager:
+  //         details[0]["isL2Manager"] = true;
+  //         details[0]["isL3Manager"] = false;
+  //         details[0]["isL4Manager"] = false;
+  //         details[0]["isL5Manager"] = false;
+  //         break;
+  //       case L3Manager:
+  //         details[0]["isL2Manager"] = false;
+  //         details[0]["isL3Manager"] = true;
+  //         details[0]["isL4Manager"] = false;
+  //         details[0]["isL5Manager"] = false;
+  //         break;
+  //       case L4Manager:
+  //         details[0]["isL2Manager"] = false;
+  //         details[0]["isL3Manager"] = false;
+  //         details[0]["isL4Manager"] = true;
+  //         details[0]["isL5Manager"] = false;
+  //         break;
+  //       case L5Manager:
+  //         details[0]["isL2Manager"] = false;
+  //         details[0]["isL3Manager"] = false;
+  //         details[0]["isL4Manager"] = false;
+  //         details[0]["isL5Manager"] = true;
+  //         break;
+  //       default:
+  //         details[0]["isL2Manager"] = false;
+  //         details[0]["isL3Manager"] = false;
+  //         details[0]["isL4Manager"] = false;
+  //         details[0]["isL5Manager"] = false;
+  //         break;
+  //     }
+  //     console.log(details, "consoling the results");
+  //     // return false
+  //     // res.send(details[0]);
+  //     res.status(200).send(details[0]);
+  //   }
+  //   catch (err) {
+  //     res.status(500).json({ "message": err.message });
+  //   }
+  // });
+  
+
   apiRoutes.post("/hrRatingAmountStorage", async (req, res) => {
     try {
       console.log("req.body::::::", req.body);
@@ -1658,20 +1716,16 @@ module.exports = function (app) {
   });
 
   apiRoutes.post("/allAppraisalInfoOfAnEmp", async (req, res) => {//for the employee main screen 
+    console.log("*******************************allAppraisalInfoOfAnE")
     try {
-      console.log("req.body:::",req.body);
-
-
       const id = req.body.employeeId;
       const rawQuery = `SELECT CONCAT(E.firstname, CONCAT(" ",E.lastName)) AS name,designation,A.appraisalId,A.createdAt,A.status,E.officialEmail FROM employees AS E INNER JOIN empappraisals AS A ON E.employeeId = A.employeeId WHERE A.employeeId = ${id}`;
 
       sequelize.query(rawQuery, {
         type: Sequelize.QueryTypes.SELECT,
       }).then((data) => {
-        console.log(data);
         res.json({ data }).status(200);
       }).catch((err) => {
-        console.log(err);
         // res.send(err).status(400);
       })
     }
@@ -2478,7 +2532,7 @@ module.exports = function (app) {
       console.log("id:::::", id)
       console.log("departmentid:::::", depId)
       if (depId != null) {
-        const rawQuery = `SELECT CONCAT(E.firstname, CONCAT(" ",E.lastName)) AS name,E.designation,A.appraisalId,A.createdAt,A.status,A.employeeId,D.name AS department FROM ((employees AS E INNER JOIN empappraisals AS A ON E.employeeId = A.employeeId)INNER JOIN departments AS D ON D.id = E.departmentId)INNER JOIN empmangs AS M ON A.employeeId = M.employeeId  WHERE M.hrID = ${id} AND D.id = ${depId}`;
+        const rawQuery = `SELECT CONCAT(E.firstname, CONCAT(" ",E.lastName)) AS name,E.designation,A.appraisalId,A.createdAt,A.status,A.employeeId,D.name AS department FROM ((employees AS E INNER JOIN emp AS A ON E.employeeId = A.employeeId)INNER JOIN departments AS D ON D.id = E.departmentId)INNER JOIN empmangs AS M ON A.employeeId = M.employeeId  WHERE M.hrID = ${id} AND D.id = ${depId}`;
         sequelize.query(rawQuery, {
           type: Sequelize.QueryTypes.SELECT,
         }).then((data) => {
