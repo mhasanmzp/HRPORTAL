@@ -1,4 +1,4 @@
-const express = require ("express");
+const express = require("express");
 const Sequelize = require("sequelize");
 const nodemailer = require("nodemailer");
 const { QueryTypes } = require("sequelize");
@@ -1537,7 +1537,7 @@ module.exports = function (app) {
 
   apiRoutes.post("/anAppraisalDetailsOfEmpEval", async (req, res) => {
     try {
-      const employeeId = parseInt(req.body.employeeId);
+      const employeeId = req.body.employeeId;
       const details = await empAppraisal.findAll({ where: { appraisalId: req.body.appraisalId }, raw: true });
       const L2Manager = details[0].assignedL2Manager;
       const L3Manager = details[0].assignedL3Manager;
