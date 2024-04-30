@@ -96,6 +96,10 @@ module.exports = (sequelize, Sequelize) => {
         isEditedByManager:{
             type:Sequelize.BOOLEAN,
             defaultValue: false
+        },
+        organisationId: {
+            type: Sequelize.INTEGER,
+            defaultValue:1
         }
         
     }, {

@@ -22,6 +22,10 @@ module.exports = (sequelize, Sequelize) => {
         },
         AverageAmount:{
             type:Sequelize.STRING(100)
+        },
+        organisationId: {
+            type: Sequelize.INTEGER,
+            defaultValue:1
         }
 
     },{

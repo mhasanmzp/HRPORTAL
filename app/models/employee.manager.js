@@ -25,6 +25,10 @@ module.exports = (sequelize, Sequelize) => {
         hrId:{
             type:Sequelize.INTEGER,
             allowNull: true
+        },
+        organisationId: {
+            type: Sequelize.INTEGER,
+            defaultValue:1
         }
         
 

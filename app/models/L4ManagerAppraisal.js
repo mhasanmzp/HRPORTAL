@@ -186,6 +186,10 @@ module.exports = (sequelize, Sequelize) => {
         isEditedByL4Manager: {
             type: Sequelize.BOOLEAN,
             defaultValue: false
+        },
+        organisationId: {
+            type: Sequelize.INTEGER,
+            defaultValue:1
         }
 
     }, {

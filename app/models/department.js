@@ -9,6 +9,10 @@ module.exports = (sequelize, Sequelize) => {
         },
         name: {
             type: Sequelize.STRING(250)
+        },
+        organisationId: {
+            type: Sequelize.INTEGER,
+            defaultValue:1
         }
     },{
         timestamps: false,
